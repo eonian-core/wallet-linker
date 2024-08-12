@@ -1,19 +1,24 @@
-import { PrismaClient } from '@prisma/client'
+import 'reflect-metadata'
 
-const prisma = new PrismaClient()
+import { ApolloServer } from '@apollo/server'
+import { startStandaloneServer } from '@apollo/server/standalone'
+import * as tq from 'type-graphql'
+import { Context, context } from './context'
+import { resolvers } from '@generated/type-graphql'
 
-async function main() {
-  const hana = await prisma.user.create({
-    data: {
-      email: 'hana@hana.io',
-      firstName: 'Hana',
-      lastName: 'Gold',
-    },
+const app = async () => {
+  const schema = await tq.buildSchema({
+    resolvers,
   })
 
-  console.log('created', hana)
+  const server = new ApolloServer<Context>({ schema })
+
+  const { url } = await startStandaloneServer(server, { context: async () => context })
+
+  console.log(`
+    🚀 Server ready at: ${url}
+    ⭐️  See sample queries: http://pris.ly/e/ts/graphql-typegraphql#using-the-graphql-api`
+  )
 }
 
-main()
-  .catch(console.error)
-  .finally(() => prisma.$disconnect())
+app()

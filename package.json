@@ -10,7 +10,8 @@
     "gen": "prisma generate",
     "dev": "ts-node src/index.ts",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "postinstall": "npm run gen"
   },
   "engines": {
     "node": ">=20"
@@ -26,7 +27,13 @@
   },
   "homepage": "https://github.com/eonian-core/wallet-linker#readme",
   "dependencies": {
-    "@prisma/client": "^5.18.0"
+    "@apollo/server": "^4.11.0",
+    "@prisma/client": "^5.18.0",
+    "@types/graphql-fields": "^1.3.9",
+    "graphql-fields": "^2.0.3",
+    "graphql-scalars": "^1.23.0",
+    "reflect-metadata": "^0.2.2",
+    "tslib": "^2.6.3"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
@@ -35,6 +42,7 @@
     "prisma": "^5.18.0",
     "ts-jest": "^29.2.4",
     "ts-node": "^10.9.2",
+    "typegraphql-prisma": "^0.28.0",
     "typescript": "^5.5.4"
   }
 }

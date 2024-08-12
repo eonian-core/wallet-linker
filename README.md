@@ -32,6 +32,8 @@ Start development server
 npm run dev
 ```
 
+Open GraphQl Playground on <http://localhost:4000/>
+
 ## Test
 
 Run tests
