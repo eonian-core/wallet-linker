@@ -1,0 +1,35 @@
+{
+  "name": "wallet-linker",
+  "version": "0.1.0",
+  "description": "Lambda allows link wallet with additional information, like email. The project focused on the security of the process and data storage",
+  "source": "src/index.ts",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "npm run gen && npm run compile",
+    "compile": "tsc",
+    "gen": "prisma generate",
+    "test": "ts-node src/index.ts"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eonian-core/wallet-linker.git"
+  },
+  "author": "leovs09@github.com",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/eonian-core/wallet-linker/issues"
+  },
+  "homepage": "https://github.com/eonian-core/wallet-linker#readme",
+  "dependencies": {
+    "@prisma/client": "^5.18.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.2.0",
+    "prisma": "^5.18.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  }
+}
