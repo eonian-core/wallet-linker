@@ -54,8 +54,8 @@ To deploy this project run
 
 ### Next steps
 
-- Run `fly status` - show the status of the application instances.
-- Run `fly apps open` - open your browser and direct it to your app.
+* Run `fly status` - show the status of the application instances.
+* Run `fly apps open` - open your browser and direct it to your app.
 
 ## Made by Eonian
 
@@ -67,3 +67,23 @@ You can also use it for own development. Any contributions and suggestions are w
 Contributions are always welcome!
 
 Create new issues or contact us in [Discord](https://discord.gg/8mcUPPYJmj) for any questions!
+
+## Architecture
+
+We have two routes in graphql
+- requires authnentication - see which emails linked for your wallet, and add or remove existing links
+- guest route - check if wallet have linked email, get preview "aaa****@g***l.com". Received only wallet address
+
+### Authnetication
+
+Works like JWT, but based on signature.
+
+* Client signs payload with private key
+* Client sends signature and payload to the server
+* Server verifies the signature and check payload and signature expiration and wallet address
+* If all checks passed, request allowed
+
+Signature for each request is required, and it contains
+* Action (ex. `link_wallet for eonian with email "aaz@b.com"`)
+* wallet address
+* time of creation (valid for 5 minutes)

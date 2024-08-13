@@ -17,21 +17,34 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model Wallet {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now())
-  firstName String
-  lastName  String?
-  email     String   @unique
-  posts     Post[]
+  createdBy String // user, our team
+  address   String
+  links     Link[]
+  deletedAt DateTime
+  deltedBy String // user, our team
 }
 
-model Post {
+model Link {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now())
-  title     String
-  body      String?
-  views     Int      @default(0)
-  author    User?    @relation(fields: [authorId], references: [id])
-  authorId  String?  @db.ObjectId
+  createdBy String // user, our team
+  wallet    Wallet?  @relation(fields: [walletId], references: [id])
+  walletId  String?  @db.ObjectId
+
+  deletedAt DateTime
+  deltedBy String // user, our team
+
+  payload EmailLink | SocialLink
+}
+
+model EmailLink {
+  email String
+}
+
+model SocialLink {
+  platform String // twitter, facebook, instagram, etc.
+  username String
 }
