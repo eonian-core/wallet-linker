@@ -18,33 +18,54 @@ datasource db {
 }
 
 model Wallet {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt DateTime @default(now())
-  createdBy String // user, our team
-  address   String
-  links     Link[]
-  deletedAt DateTime
-  deltedBy String // user, our team
-}
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt      DateTime @default(now())
+  /// Initiator of the create action. Ex. user, admin
+  createdBy      String
+  /// soft delete, if set then deleted
+  deletedAt      DateTime
+  /// Initiator of the delete action. Ex. user, admin
+  deltedBy       String
+  
+  /// Wallet address
+  address        String
+  /// Chain id, ex. 1 for Ethereum, 56 for Binance Smart Chain
+  chainId        Int
 
-model Link {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt DateTime @default(now())
-  createdBy String // user, our team
-  wallet    Wallet?  @relation(fields: [walletId], references: [id])
-  walletId  String?  @db.ObjectId
-
-  deletedAt DateTime
-  deltedBy String // user, our team
-
-  payload EmailLink | SocialLink
+  emailLinks     EmailLink[]
+  socialLinks    SocialLink[]
 }
 
 model EmailLink {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  /// Initiator of the create action. Ex. user, admin
+  createdBy      String
+  /// soft delete, if set then deleted
+  deletedAt      DateTime
+  /// Initiator of the delete action. Ex. user, admin
+  deltedBy       String
+
+  wallet    Wallet?  @relation(fields: [walletId], references: [id])
+  walletId  String?  @db.ObjectId
+  
   email String
 }
 
 model SocialLink {
-  platform String // twitter, facebook, instagram, etc.
-  username String
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  /// Initiator of the create action. Ex. user, admin
+  createdBy      String
+  /// soft delete, if set then deleted
+  deletedAt      DateTime
+  /// Initiator of the delete action. Ex. user, admin
+  deltedBy       String
+
+  wallet    Wallet?  @relation(fields: [walletId], references: [id])
+  walletId  String?  @db.ObjectId
+  
+  /// twitter, facebook, instagram, etc.
+  platform  String 
+  username  String
 }
