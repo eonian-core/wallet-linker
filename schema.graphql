@@ -3,30 +3,6 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
-type AffectedRowsOutput {
-  count: Int!
-}
-
-type AggregateEmailLink {
-  _count: EmailLinkCountAggregate
-  _max: EmailLinkMaxAggregate
-  _min: EmailLinkMinAggregate
-}
-
-type AggregateSocialLink {
-  _count: SocialLinkCountAggregate
-  _max: SocialLinkMaxAggregate
-  _min: SocialLinkMinAggregate
-}
-
-type AggregateWallet {
-  _avg: WalletAvgAggregate
-  _count: WalletCountAggregate
-  _max: WalletMaxAggregate
-  _min: WalletMinAggregate
-  _sum: WalletSumAggregate
-}
-
 input DateTimeFieldUpdateOperationsInput {
   set: DateTimeISO
 }
@@ -47,20 +23,6 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTimeISO
 
-input DateTimeWithAggregatesFilter {
-  _count: NestedIntFilter
-  _max: NestedDateTimeFilter
-  _min: NestedDateTimeFilter
-  equals: DateTimeISO
-  gt: DateTimeISO
-  gte: DateTimeISO
-  in: [DateTimeISO!]
-  lt: DateTimeISO
-  lte: DateTimeISO
-  not: NestedDateTimeWithAggregatesFilter
-  notIn: [DateTimeISO!]
-}
-
 type EmailLink {
   createdAt: DateTimeISO!
 
@@ -78,27 +40,6 @@ type EmailLink {
   walletId: String
 }
 
-type EmailLinkCountAggregate {
-  _all: Int!
-  createdAt: Int!
-  createdBy: Int!
-  deletedAt: Int!
-  deltedBy: Int!
-  email: Int!
-  id: Int!
-  walletId: Int!
-}
-
-input EmailLinkCountOrderByAggregateInput {
-  createdAt: SortOrder
-  createdBy: SortOrder
-  deletedAt: SortOrder
-  deltedBy: SortOrder
-  email: SortOrder
-  id: SortOrder
-  walletId: SortOrder
-}
-
 input EmailLinkCreateInput {
   createdAt: DateTimeISO
   createdBy: String!
@@ -107,16 +48,6 @@ input EmailLinkCreateInput {
   email: String!
   id: String
   wallet: WalletCreateNestedOneWithoutEmailLinksInput
-}
-
-input EmailLinkCreateManyInput {
-  createdAt: DateTimeISO
-  createdBy: String!
-  deletedAt: DateTimeISO!
-  deltedBy: String!
-  email: String!
-  id: String
-  walletId: String
 }
 
 input EmailLinkCreateManyWalletInput {
@@ -153,80 +84,14 @@ input EmailLinkCreateWithoutWalletInput {
   id: String
 }
 
-type EmailLinkGroupBy {
-  _count: EmailLinkCountAggregate
-  _max: EmailLinkMaxAggregate
-  _min: EmailLinkMinAggregate
-  createdAt: DateTimeISO!
-  createdBy: String!
-  deletedAt: DateTimeISO!
-  deltedBy: String!
-  email: String!
-  id: String!
-  walletId: String
-}
-
 input EmailLinkListRelationFilter {
   every: EmailLinkWhereInput
   none: EmailLinkWhereInput
   some: EmailLinkWhereInput
 }
 
-type EmailLinkMaxAggregate {
-  createdAt: DateTimeISO
-  createdBy: String
-  deletedAt: DateTimeISO
-  deltedBy: String
-  email: String
-  id: String
-  walletId: String
-}
-
-input EmailLinkMaxOrderByAggregateInput {
-  createdAt: SortOrder
-  createdBy: SortOrder
-  deletedAt: SortOrder
-  deltedBy: SortOrder
-  email: SortOrder
-  id: SortOrder
-  walletId: SortOrder
-}
-
-type EmailLinkMinAggregate {
-  createdAt: DateTimeISO
-  createdBy: String
-  deletedAt: DateTimeISO
-  deltedBy: String
-  email: String
-  id: String
-  walletId: String
-}
-
-input EmailLinkMinOrderByAggregateInput {
-  createdAt: SortOrder
-  createdBy: SortOrder
-  deletedAt: SortOrder
-  deltedBy: SortOrder
-  email: SortOrder
-  id: SortOrder
-  walletId: SortOrder
-}
-
 input EmailLinkOrderByRelationAggregateInput {
   _count: SortOrder
-}
-
-input EmailLinkOrderByWithAggregationInput {
-  _count: EmailLinkCountOrderByAggregateInput
-  _max: EmailLinkMaxOrderByAggregateInput
-  _min: EmailLinkMinOrderByAggregateInput
-  createdAt: SortOrder
-  createdBy: SortOrder
-  deletedAt: SortOrder
-  deltedBy: SortOrder
-  email: SortOrder
-  id: SortOrder
-  walletId: SortOrder
 }
 
 input EmailLinkOrderByWithRelationInput {
@@ -261,19 +126,6 @@ input EmailLinkScalarWhereInput {
   email: StringFilter
   id: StringFilter
   walletId: StringNullableFilter
-}
-
-input EmailLinkScalarWhereWithAggregatesInput {
-  AND: [EmailLinkScalarWhereWithAggregatesInput!]
-  NOT: [EmailLinkScalarWhereWithAggregatesInput!]
-  OR: [EmailLinkScalarWhereWithAggregatesInput!]
-  createdAt: DateTimeWithAggregatesFilter
-  createdBy: StringWithAggregatesFilter
-  deletedAt: DateTimeWithAggregatesFilter
-  deltedBy: StringWithAggregatesFilter
-  email: StringWithAggregatesFilter
-  id: StringWithAggregatesFilter
-  walletId: StringNullableWithAggregatesFilter
 }
 
 input EmailLinkUpdateInput {
@@ -378,44 +230,13 @@ input IntFilter {
   notIn: [Int!]
 }
 
-input IntWithAggregatesFilter {
-  _avg: NestedFloatFilter
-  _count: NestedIntFilter
-  _max: NestedIntFilter
-  _min: NestedIntFilter
-  _sum: NestedIntFilter
-  equals: Int
-  gt: Int
-  gte: Int
-  in: [Int!]
-  lt: Int
-  lte: Int
-  not: NestedIntWithAggregatesFilter
-  notIn: [Int!]
-}
-
 type Mutation {
-  createManyEmailLink(data: [EmailLinkCreateManyInput!]!): AffectedRowsOutput!
-  createManySocialLink(data: [SocialLinkCreateManyInput!]!): AffectedRowsOutput!
-  createManyWallet(data: [WalletCreateManyInput!]!): AffectedRowsOutput!
   createOneEmailLink(data: EmailLinkCreateInput!): EmailLink!
   createOneSocialLink(data: SocialLinkCreateInput!): SocialLink!
   createOneWallet(data: WalletCreateInput!): Wallet!
-  deleteManyEmailLink(where: EmailLinkWhereInput): AffectedRowsOutput!
-  deleteManySocialLink(where: SocialLinkWhereInput): AffectedRowsOutput!
-  deleteManyWallet(where: WalletWhereInput): AffectedRowsOutput!
-  deleteOneEmailLink(where: EmailLinkWhereUniqueInput!): EmailLink
-  deleteOneSocialLink(where: SocialLinkWhereUniqueInput!): SocialLink
-  deleteOneWallet(where: WalletWhereUniqueInput!): Wallet
-  updateManyEmailLink(data: EmailLinkUpdateManyMutationInput!, where: EmailLinkWhereInput): AffectedRowsOutput!
-  updateManySocialLink(data: SocialLinkUpdateManyMutationInput!, where: SocialLinkWhereInput): AffectedRowsOutput!
-  updateManyWallet(data: WalletUpdateManyMutationInput!, where: WalletWhereInput): AffectedRowsOutput!
   updateOneEmailLink(data: EmailLinkUpdateInput!, where: EmailLinkWhereUniqueInput!): EmailLink
   updateOneSocialLink(data: SocialLinkUpdateInput!, where: SocialLinkWhereUniqueInput!): SocialLink
   updateOneWallet(data: WalletUpdateInput!, where: WalletWhereUniqueInput!): Wallet
-  upsertOneEmailLink(create: EmailLinkCreateInput!, update: EmailLinkUpdateInput!, where: EmailLinkWhereUniqueInput!): EmailLink!
-  upsertOneSocialLink(create: SocialLinkCreateInput!, update: SocialLinkUpdateInput!, where: SocialLinkWhereUniqueInput!): SocialLink!
-  upsertOneWallet(create: WalletCreateInput!, update: WalletUpdateInput!, where: WalletWhereUniqueInput!): Wallet!
 }
 
 input NestedDateTimeFilter {
@@ -429,31 +250,6 @@ input NestedDateTimeFilter {
   notIn: [DateTimeISO!]
 }
 
-input NestedDateTimeWithAggregatesFilter {
-  _count: NestedIntFilter
-  _max: NestedDateTimeFilter
-  _min: NestedDateTimeFilter
-  equals: DateTimeISO
-  gt: DateTimeISO
-  gte: DateTimeISO
-  in: [DateTimeISO!]
-  lt: DateTimeISO
-  lte: DateTimeISO
-  not: NestedDateTimeWithAggregatesFilter
-  notIn: [DateTimeISO!]
-}
-
-input NestedFloatFilter {
-  equals: Float
-  gt: Float
-  gte: Float
-  in: [Float!]
-  lt: Float
-  lte: Float
-  not: NestedFloatFilter
-  notIn: [Float!]
-}
-
 input NestedIntFilter {
   equals: Int
   gt: Int
@@ -462,34 +258,6 @@ input NestedIntFilter {
   lt: Int
   lte: Int
   not: NestedIntFilter
-  notIn: [Int!]
-}
-
-input NestedIntNullableFilter {
-  equals: Int
-  gt: Int
-  gte: Int
-  in: [Int!]
-  isSet: Boolean
-  lt: Int
-  lte: Int
-  not: NestedIntNullableFilter
-  notIn: [Int!]
-}
-
-input NestedIntWithAggregatesFilter {
-  _avg: NestedFloatFilter
-  _count: NestedIntFilter
-  _max: NestedIntFilter
-  _min: NestedIntFilter
-  _sum: NestedIntFilter
-  equals: Int
-  gt: Int
-  gte: Int
-  in: [Int!]
-  lt: Int
-  lte: Int
-  not: NestedIntWithAggregatesFilter
   notIn: [Int!]
 }
 
@@ -522,59 +290,9 @@ input NestedStringNullableFilter {
   startsWith: String
 }
 
-input NestedStringNullableWithAggregatesFilter {
-  _count: NestedIntNullableFilter
-  _max: NestedStringNullableFilter
-  _min: NestedStringNullableFilter
-  contains: String
-  endsWith: String
-  equals: String
-  gt: String
-  gte: String
-  in: [String!]
-  isSet: Boolean
-  lt: String
-  lte: String
-  not: NestedStringNullableWithAggregatesFilter
-  notIn: [String!]
-  startsWith: String
-}
-
-input NestedStringWithAggregatesFilter {
-  _count: NestedIntFilter
-  _max: NestedStringFilter
-  _min: NestedStringFilter
-  contains: String
-  endsWith: String
-  equals: String
-  gt: String
-  gte: String
-  in: [String!]
-  lt: String
-  lte: String
-  not: NestedStringWithAggregatesFilter
-  notIn: [String!]
-  startsWith: String
-}
-
 type Query {
-  aggregateEmailLink(cursor: EmailLinkWhereUniqueInput, orderBy: [EmailLinkOrderByWithRelationInput!], skip: Int, take: Int, where: EmailLinkWhereInput): AggregateEmailLink!
-  aggregateSocialLink(cursor: SocialLinkWhereUniqueInput, orderBy: [SocialLinkOrderByWithRelationInput!], skip: Int, take: Int, where: SocialLinkWhereInput): AggregateSocialLink!
-  aggregateWallet(cursor: WalletWhereUniqueInput, orderBy: [WalletOrderByWithRelationInput!], skip: Int, take: Int, where: WalletWhereInput): AggregateWallet!
   emailLink(where: EmailLinkWhereUniqueInput!): EmailLink
   emailLinks(cursor: EmailLinkWhereUniqueInput, distinct: [EmailLinkScalarFieldEnum!], orderBy: [EmailLinkOrderByWithRelationInput!], skip: Int, take: Int, where: EmailLinkWhereInput): [EmailLink!]!
-  findFirstEmailLink(cursor: EmailLinkWhereUniqueInput, distinct: [EmailLinkScalarFieldEnum!], orderBy: [EmailLinkOrderByWithRelationInput!], skip: Int, take: Int, where: EmailLinkWhereInput): EmailLink
-  findFirstEmailLinkOrThrow(cursor: EmailLinkWhereUniqueInput, distinct: [EmailLinkScalarFieldEnum!], orderBy: [EmailLinkOrderByWithRelationInput!], skip: Int, take: Int, where: EmailLinkWhereInput): EmailLink
-  findFirstSocialLink(cursor: SocialLinkWhereUniqueInput, distinct: [SocialLinkScalarFieldEnum!], orderBy: [SocialLinkOrderByWithRelationInput!], skip: Int, take: Int, where: SocialLinkWhereInput): SocialLink
-  findFirstSocialLinkOrThrow(cursor: SocialLinkWhereUniqueInput, distinct: [SocialLinkScalarFieldEnum!], orderBy: [SocialLinkOrderByWithRelationInput!], skip: Int, take: Int, where: SocialLinkWhereInput): SocialLink
-  findFirstWallet(cursor: WalletWhereUniqueInput, distinct: [WalletScalarFieldEnum!], orderBy: [WalletOrderByWithRelationInput!], skip: Int, take: Int, where: WalletWhereInput): Wallet
-  findFirstWalletOrThrow(cursor: WalletWhereUniqueInput, distinct: [WalletScalarFieldEnum!], orderBy: [WalletOrderByWithRelationInput!], skip: Int, take: Int, where: WalletWhereInput): Wallet
-  getEmailLink(where: EmailLinkWhereUniqueInput!): EmailLink
-  getSocialLink(where: SocialLinkWhereUniqueInput!): SocialLink
-  getWallet(where: WalletWhereUniqueInput!): Wallet
-  groupByEmailLink(by: [EmailLinkScalarFieldEnum!]!, having: EmailLinkScalarWhereWithAggregatesInput, orderBy: [EmailLinkOrderByWithAggregationInput!], skip: Int, take: Int, where: EmailLinkWhereInput): [EmailLinkGroupBy!]!
-  groupBySocialLink(by: [SocialLinkScalarFieldEnum!]!, having: SocialLinkScalarWhereWithAggregatesInput, orderBy: [SocialLinkOrderByWithAggregationInput!], skip: Int, take: Int, where: SocialLinkWhereInput): [SocialLinkGroupBy!]!
-  groupByWallet(by: [WalletScalarFieldEnum!]!, having: WalletScalarWhereWithAggregatesInput, orderBy: [WalletOrderByWithAggregationInput!], skip: Int, take: Int, where: WalletWhereInput): [WalletGroupBy!]!
   socialLink(where: SocialLinkWhereUniqueInput!): SocialLink
   socialLinks(cursor: SocialLinkWhereUniqueInput, distinct: [SocialLinkScalarFieldEnum!], orderBy: [SocialLinkOrderByWithRelationInput!], skip: Int, take: Int, where: SocialLinkWhereInput): [SocialLink!]!
   wallet(where: WalletWhereUniqueInput!): Wallet
@@ -606,29 +324,6 @@ type SocialLink {
   walletId: String
 }
 
-type SocialLinkCountAggregate {
-  _all: Int!
-  createdAt: Int!
-  createdBy: Int!
-  deletedAt: Int!
-  deltedBy: Int!
-  id: Int!
-  platform: Int!
-  username: Int!
-  walletId: Int!
-}
-
-input SocialLinkCountOrderByAggregateInput {
-  createdAt: SortOrder
-  createdBy: SortOrder
-  deletedAt: SortOrder
-  deltedBy: SortOrder
-  id: SortOrder
-  platform: SortOrder
-  username: SortOrder
-  walletId: SortOrder
-}
-
 input SocialLinkCreateInput {
   createdAt: DateTimeISO
   createdBy: String!
@@ -638,17 +333,6 @@ input SocialLinkCreateInput {
   platform: String!
   username: String!
   wallet: WalletCreateNestedOneWithoutSocialLinksInput
-}
-
-input SocialLinkCreateManyInput {
-  createdAt: DateTimeISO
-  createdBy: String!
-  deletedAt: DateTimeISO!
-  deltedBy: String!
-  id: String
-  platform: String!
-  username: String!
-  walletId: String
 }
 
 input SocialLinkCreateManyWalletInput {
@@ -687,86 +371,14 @@ input SocialLinkCreateWithoutWalletInput {
   username: String!
 }
 
-type SocialLinkGroupBy {
-  _count: SocialLinkCountAggregate
-  _max: SocialLinkMaxAggregate
-  _min: SocialLinkMinAggregate
-  createdAt: DateTimeISO!
-  createdBy: String!
-  deletedAt: DateTimeISO!
-  deltedBy: String!
-  id: String!
-  platform: String!
-  username: String!
-  walletId: String
-}
-
 input SocialLinkListRelationFilter {
   every: SocialLinkWhereInput
   none: SocialLinkWhereInput
   some: SocialLinkWhereInput
 }
 
-type SocialLinkMaxAggregate {
-  createdAt: DateTimeISO
-  createdBy: String
-  deletedAt: DateTimeISO
-  deltedBy: String
-  id: String
-  platform: String
-  username: String
-  walletId: String
-}
-
-input SocialLinkMaxOrderByAggregateInput {
-  createdAt: SortOrder
-  createdBy: SortOrder
-  deletedAt: SortOrder
-  deltedBy: SortOrder
-  id: SortOrder
-  platform: SortOrder
-  username: SortOrder
-  walletId: SortOrder
-}
-
-type SocialLinkMinAggregate {
-  createdAt: DateTimeISO
-  createdBy: String
-  deletedAt: DateTimeISO
-  deltedBy: String
-  id: String
-  platform: String
-  username: String
-  walletId: String
-}
-
-input SocialLinkMinOrderByAggregateInput {
-  createdAt: SortOrder
-  createdBy: SortOrder
-  deletedAt: SortOrder
-  deltedBy: SortOrder
-  id: SortOrder
-  platform: SortOrder
-  username: SortOrder
-  walletId: SortOrder
-}
-
 input SocialLinkOrderByRelationAggregateInput {
   _count: SortOrder
-}
-
-input SocialLinkOrderByWithAggregationInput {
-  _count: SocialLinkCountOrderByAggregateInput
-  _max: SocialLinkMaxOrderByAggregateInput
-  _min: SocialLinkMinOrderByAggregateInput
-  createdAt: SortOrder
-  createdBy: SortOrder
-  deletedAt: SortOrder
-  deltedBy: SortOrder
-  id: SortOrder
-  platform: SortOrder
-  username: SortOrder
-  walletId: SortOrder
 }
 
 input SocialLinkOrderByWithRelationInput {
@@ -804,20 +416,6 @@ input SocialLinkScalarWhereInput {
   platform: StringFilter
   username: StringFilter
   walletId: StringNullableFilter
-}
-
-input SocialLinkScalarWhereWithAggregatesInput {
-  AND: [SocialLinkScalarWhereWithAggregatesInput!]
-  NOT: [SocialLinkScalarWhereWithAggregatesInput!]
-  OR: [SocialLinkScalarWhereWithAggregatesInput!]
-  createdAt: DateTimeWithAggregatesFilter
-  createdBy: StringWithAggregatesFilter
-  deletedAt: DateTimeWithAggregatesFilter
-  deltedBy: StringWithAggregatesFilter
-  id: StringWithAggregatesFilter
-  platform: StringWithAggregatesFilter
-  username: StringWithAggregatesFilter
-  walletId: StringNullableWithAggregatesFilter
 }
 
 input SocialLinkUpdateInput {
@@ -948,43 +546,6 @@ input StringNullableFilter {
   startsWith: String
 }
 
-input StringNullableWithAggregatesFilter {
-  _count: NestedIntNullableFilter
-  _max: NestedStringNullableFilter
-  _min: NestedStringNullableFilter
-  contains: String
-  endsWith: String
-  equals: String
-  gt: String
-  gte: String
-  in: [String!]
-  isSet: Boolean
-  lt: String
-  lte: String
-  mode: QueryMode
-  not: NestedStringNullableWithAggregatesFilter
-  notIn: [String!]
-  startsWith: String
-}
-
-input StringWithAggregatesFilter {
-  _count: NestedIntFilter
-  _max: NestedStringFilter
-  _min: NestedStringFilter
-  contains: String
-  endsWith: String
-  equals: String
-  gt: String
-  gte: String
-  in: [String!]
-  lt: String
-  lte: String
-  mode: QueryMode
-  not: NestedStringWithAggregatesFilter
-  notIn: [String!]
-  startsWith: String
-}
-
 type Wallet {
   _count: WalletCount
 
@@ -1008,38 +569,9 @@ type Wallet {
   socialLinks(cursor: SocialLinkWhereUniqueInput, distinct: [SocialLinkScalarFieldEnum!], orderBy: [SocialLinkOrderByWithRelationInput!], skip: Int, take: Int, where: SocialLinkWhereInput): [SocialLink!]!
 }
 
-type WalletAvgAggregate {
-  chainId: Float
-}
-
-input WalletAvgOrderByAggregateInput {
-  chainId: SortOrder
-}
-
 type WalletCount {
   emailLinks(where: EmailLinkWhereInput): Int!
   socialLinks(where: SocialLinkWhereInput): Int!
-}
-
-type WalletCountAggregate {
-  _all: Int!
-  address: Int!
-  chainId: Int!
-  createdAt: Int!
-  createdBy: Int!
-  deletedAt: Int!
-  deltedBy: Int!
-  id: Int!
-}
-
-input WalletCountOrderByAggregateInput {
-  address: SortOrder
-  chainId: SortOrder
-  createdAt: SortOrder
-  createdBy: SortOrder
-  deletedAt: SortOrder
-  deltedBy: SortOrder
-  id: SortOrder
 }
 
 input WalletCreateInput {
@@ -1052,16 +584,6 @@ input WalletCreateInput {
   emailLinks: EmailLinkCreateNestedManyWithoutWalletInput
   id: String
   socialLinks: SocialLinkCreateNestedManyWithoutWalletInput
-}
-
-input WalletCreateManyInput {
-  address: String!
-  chainId: Int!
-  createdAt: DateTimeISO
-  createdBy: String!
-  deletedAt: DateTimeISO!
-  deltedBy: String!
-  id: String
 }
 
 input WalletCreateNestedOneWithoutEmailLinksInput {
@@ -1108,79 +630,9 @@ input WalletCreateWithoutSocialLinksInput {
   id: String
 }
 
-type WalletGroupBy {
-  _avg: WalletAvgAggregate
-  _count: WalletCountAggregate
-  _max: WalletMaxAggregate
-  _min: WalletMinAggregate
-  _sum: WalletSumAggregate
-  address: String!
-  chainId: Int!
-  createdAt: DateTimeISO!
-  createdBy: String!
-  deletedAt: DateTimeISO!
-  deltedBy: String!
-  id: String!
-}
-
-type WalletMaxAggregate {
-  address: String
-  chainId: Int
-  createdAt: DateTimeISO
-  createdBy: String
-  deletedAt: DateTimeISO
-  deltedBy: String
-  id: String
-}
-
-input WalletMaxOrderByAggregateInput {
-  address: SortOrder
-  chainId: SortOrder
-  createdAt: SortOrder
-  createdBy: SortOrder
-  deletedAt: SortOrder
-  deltedBy: SortOrder
-  id: SortOrder
-}
-
-type WalletMinAggregate {
-  address: String
-  chainId: Int
-  createdAt: DateTimeISO
-  createdBy: String
-  deletedAt: DateTimeISO
-  deltedBy: String
-  id: String
-}
-
-input WalletMinOrderByAggregateInput {
-  address: SortOrder
-  chainId: SortOrder
-  createdAt: SortOrder
-  createdBy: SortOrder
-  deletedAt: SortOrder
-  deltedBy: SortOrder
-  id: SortOrder
-}
-
 input WalletNullableRelationFilter {
   is: WalletWhereInput
   isNot: WalletWhereInput
-}
-
-input WalletOrderByWithAggregationInput {
-  _avg: WalletAvgOrderByAggregateInput
-  _count: WalletCountOrderByAggregateInput
-  _max: WalletMaxOrderByAggregateInput
-  _min: WalletMinOrderByAggregateInput
-  _sum: WalletSumOrderByAggregateInput
-  address: SortOrder
-  chainId: SortOrder
-  createdAt: SortOrder
-  createdBy: SortOrder
-  deletedAt: SortOrder
-  deltedBy: SortOrder
-  id: SortOrder
 }
 
 input WalletOrderByWithRelationInput {
@@ -1205,27 +657,6 @@ enum WalletScalarFieldEnum {
   id
 }
 
-input WalletScalarWhereWithAggregatesInput {
-  AND: [WalletScalarWhereWithAggregatesInput!]
-  NOT: [WalletScalarWhereWithAggregatesInput!]
-  OR: [WalletScalarWhereWithAggregatesInput!]
-  address: StringWithAggregatesFilter
-  chainId: IntWithAggregatesFilter
-  createdAt: DateTimeWithAggregatesFilter
-  createdBy: StringWithAggregatesFilter
-  deletedAt: DateTimeWithAggregatesFilter
-  deltedBy: StringWithAggregatesFilter
-  id: StringWithAggregatesFilter
-}
-
-type WalletSumAggregate {
-  chainId: Int
-}
-
-input WalletSumOrderByAggregateInput {
-  chainId: SortOrder
-}
-
 input WalletUpdateInput {
   address: StringFieldUpdateOperationsInput
   chainId: IntFieldUpdateOperationsInput
@@ -1235,15 +666,6 @@ input WalletUpdateInput {
   deltedBy: StringFieldUpdateOperationsInput
   emailLinks: EmailLinkUpdateManyWithoutWalletNestedInput
   socialLinks: SocialLinkUpdateManyWithoutWalletNestedInput
-}
-
-input WalletUpdateManyMutationInput {
-  address: StringFieldUpdateOperationsInput
-  chainId: IntFieldUpdateOperationsInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  createdBy: StringFieldUpdateOperationsInput
-  deletedAt: DateTimeFieldUpdateOperationsInput
-  deltedBy: StringFieldUpdateOperationsInput
 }
 
 input WalletUpdateOneWithoutEmailLinksNestedInput {

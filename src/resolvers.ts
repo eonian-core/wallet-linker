@@ -1,19 +1,41 @@
 import {
-    WalletCrudResolver,
     WalletRelationsResolver,
-    EmailLinkCrudResolver,
+    FindUniqueWalletResolver,
+    FindManyWalletResolver,
+    CreateOneWalletResolver,
+    UpdateOneWalletResolver,
+
+    FindUniqueEmailLinkResolver,
+    FindManyEmailLinkResolver,
     EmailLinkRelationsResolver,
-    SocialLinkCrudResolver,
+    CreateOneEmailLinkResolver,
+    UpdateOneEmailLinkResolver,
+    
+    FindUniqueSocialLinkResolver,
+    FindManySocialLinkResolver,
     SocialLinkRelationsResolver,
+    CreateOneSocialLinkResolver,
+    UpdateOneSocialLinkResolver,
 } from '@generated/type-graphql'
 
 type NonEmptyArray<T> = readonly [T, ...T[]] | [T, ...T[]];
 
 export const resolvers: NonEmptyArray<Function> = [
-    WalletCrudResolver,
     WalletRelationsResolver,
-    EmailLinkCrudResolver,
+    FindUniqueWalletResolver,
+    FindManyWalletResolver,
+    CreateOneWalletResolver,
+    UpdateOneWalletResolver,
+
+    FindUniqueEmailLinkResolver,
+    FindManyEmailLinkResolver,
     EmailLinkRelationsResolver,
-    SocialLinkCrudResolver,
+    CreateOneEmailLinkResolver,
+    UpdateOneEmailLinkResolver,
+    
+    FindUniqueSocialLinkResolver,
+    FindManySocialLinkResolver,
     SocialLinkRelationsResolver,
+    CreateOneSocialLinkResolver,
+    UpdateOneSocialLinkResolver,
 ]
