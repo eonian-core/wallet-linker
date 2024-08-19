@@ -20,9 +20,11 @@ type AggregateSocialLink {
 }
 
 type AggregateWallet {
+  _avg: WalletAvgAggregate
   _count: WalletCountAggregate
   _max: WalletMaxAggregate
   _min: WalletMinAggregate
+  _sum: WalletSumAggregate
 }
 
 input DateTimeFieldUpdateOperationsInput {
@@ -61,8 +63,14 @@ input DateTimeWithAggregatesFilter {
 
 type EmailLink {
   createdAt: DateTimeISO!
+
+  """Initiator of the create action. Ex. user, admin"""
   createdBy: String!
+
+  """soft delete, if set then deleted"""
   deletedAt: DateTimeISO!
+
+  """Initiator of the delete action. Ex. user, admin"""
   deltedBy: String!
   email: String!
   id: String!
@@ -351,6 +359,41 @@ input EmailLinkWhereUniqueInput {
   walletId: StringNullableFilter
 }
 
+input IntFieldUpdateOperationsInput {
+  decrement: Int
+  divide: Int
+  increment: Int
+  multiply: Int
+  set: Int
+}
+
+input IntFilter {
+  equals: Int
+  gt: Int
+  gte: Int
+  in: [Int!]
+  lt: Int
+  lte: Int
+  not: NestedIntFilter
+  notIn: [Int!]
+}
+
+input IntWithAggregatesFilter {
+  _avg: NestedFloatFilter
+  _count: NestedIntFilter
+  _max: NestedIntFilter
+  _min: NestedIntFilter
+  _sum: NestedIntFilter
+  equals: Int
+  gt: Int
+  gte: Int
+  in: [Int!]
+  lt: Int
+  lte: Int
+  not: NestedIntWithAggregatesFilter
+  notIn: [Int!]
+}
+
 type Mutation {
   createManyEmailLink(data: [EmailLinkCreateManyInput!]!): AffectedRowsOutput!
   createManySocialLink(data: [SocialLinkCreateManyInput!]!): AffectedRowsOutput!
@@ -400,6 +443,17 @@ input NestedDateTimeWithAggregatesFilter {
   notIn: [DateTimeISO!]
 }
 
+input NestedFloatFilter {
+  equals: Float
+  gt: Float
+  gte: Float
+  in: [Float!]
+  lt: Float
+  lte: Float
+  not: NestedFloatFilter
+  notIn: [Float!]
+}
+
 input NestedIntFilter {
   equals: Int
   gt: Int
@@ -420,6 +474,22 @@ input NestedIntNullableFilter {
   lt: Int
   lte: Int
   not: NestedIntNullableFilter
+  notIn: [Int!]
+}
+
+input NestedIntWithAggregatesFilter {
+  _avg: NestedFloatFilter
+  _count: NestedIntFilter
+  _max: NestedIntFilter
+  _min: NestedIntFilter
+  _sum: NestedIntFilter
+  equals: Int
+  gt: Int
+  gte: Int
+  in: [Int!]
+  lt: Int
+  lte: Int
+  not: NestedIntWithAggregatesFilter
   notIn: [Int!]
 }
 
@@ -518,10 +588,18 @@ enum QueryMode {
 
 type SocialLink {
   createdAt: DateTimeISO!
+
+  """Initiator of the create action. Ex. user, admin"""
   createdBy: String!
+
+  """soft delete, if set then deleted"""
   deletedAt: DateTimeISO!
+
+  """Initiator of the delete action. Ex. user, admin"""
   deltedBy: String!
   id: String!
+
+  """twitter, facebook, instagram, etc."""
   platform: String!
   username: String!
   wallet(where: WalletWhereInput): Wallet
@@ -909,14 +987,33 @@ input StringWithAggregatesFilter {
 
 type Wallet {
   _count: WalletCount
+
+  """Wallet address"""
   address: String!
+
+  """Chain id, ex. 1 for Ethereum, 56 for Binance Smart Chain"""
+  chainId: Int!
   createdAt: DateTimeISO!
+
+  """Initiator of the create action. Ex. user, admin"""
   createdBy: String!
+
+  """soft delete, if set then deleted"""
   deletedAt: DateTimeISO!
+
+  """Initiator of the delete action. Ex. user, admin"""
   deltedBy: String!
   emailLinks(cursor: EmailLinkWhereUniqueInput, distinct: [EmailLinkScalarFieldEnum!], orderBy: [EmailLinkOrderByWithRelationInput!], skip: Int, take: Int, where: EmailLinkWhereInput): [EmailLink!]!
   id: String!
   socialLinks(cursor: SocialLinkWhereUniqueInput, distinct: [SocialLinkScalarFieldEnum!], orderBy: [SocialLinkOrderByWithRelationInput!], skip: Int, take: Int, where: SocialLinkWhereInput): [SocialLink!]!
+}
+
+type WalletAvgAggregate {
+  chainId: Float
+}
+
+input WalletAvgOrderByAggregateInput {
+  chainId: SortOrder
 }
 
 type WalletCount {
@@ -927,6 +1024,7 @@ type WalletCount {
 type WalletCountAggregate {
   _all: Int!
   address: Int!
+  chainId: Int!
   createdAt: Int!
   createdBy: Int!
   deletedAt: Int!
@@ -936,6 +1034,7 @@ type WalletCountAggregate {
 
 input WalletCountOrderByAggregateInput {
   address: SortOrder
+  chainId: SortOrder
   createdAt: SortOrder
   createdBy: SortOrder
   deletedAt: SortOrder
@@ -945,6 +1044,7 @@ input WalletCountOrderByAggregateInput {
 
 input WalletCreateInput {
   address: String!
+  chainId: Int!
   createdAt: DateTimeISO
   createdBy: String!
   deletedAt: DateTimeISO!
@@ -956,6 +1056,7 @@ input WalletCreateInput {
 
 input WalletCreateManyInput {
   address: String!
+  chainId: Int!
   createdAt: DateTimeISO
   createdBy: String!
   deletedAt: DateTimeISO!
@@ -987,6 +1088,7 @@ input WalletCreateOrConnectWithoutSocialLinksInput {
 
 input WalletCreateWithoutEmailLinksInput {
   address: String!
+  chainId: Int!
   createdAt: DateTimeISO
   createdBy: String!
   deletedAt: DateTimeISO!
@@ -997,6 +1099,7 @@ input WalletCreateWithoutEmailLinksInput {
 
 input WalletCreateWithoutSocialLinksInput {
   address: String!
+  chainId: Int!
   createdAt: DateTimeISO
   createdBy: String!
   deletedAt: DateTimeISO!
@@ -1006,10 +1109,13 @@ input WalletCreateWithoutSocialLinksInput {
 }
 
 type WalletGroupBy {
+  _avg: WalletAvgAggregate
   _count: WalletCountAggregate
   _max: WalletMaxAggregate
   _min: WalletMinAggregate
+  _sum: WalletSumAggregate
   address: String!
+  chainId: Int!
   createdAt: DateTimeISO!
   createdBy: String!
   deletedAt: DateTimeISO!
@@ -1019,6 +1125,7 @@ type WalletGroupBy {
 
 type WalletMaxAggregate {
   address: String
+  chainId: Int
   createdAt: DateTimeISO
   createdBy: String
   deletedAt: DateTimeISO
@@ -1028,6 +1135,7 @@ type WalletMaxAggregate {
 
 input WalletMaxOrderByAggregateInput {
   address: SortOrder
+  chainId: SortOrder
   createdAt: SortOrder
   createdBy: SortOrder
   deletedAt: SortOrder
@@ -1037,6 +1145,7 @@ input WalletMaxOrderByAggregateInput {
 
 type WalletMinAggregate {
   address: String
+  chainId: Int
   createdAt: DateTimeISO
   createdBy: String
   deletedAt: DateTimeISO
@@ -1046,6 +1155,7 @@ type WalletMinAggregate {
 
 input WalletMinOrderByAggregateInput {
   address: SortOrder
+  chainId: SortOrder
   createdAt: SortOrder
   createdBy: SortOrder
   deletedAt: SortOrder
@@ -1059,10 +1169,13 @@ input WalletNullableRelationFilter {
 }
 
 input WalletOrderByWithAggregationInput {
+  _avg: WalletAvgOrderByAggregateInput
   _count: WalletCountOrderByAggregateInput
   _max: WalletMaxOrderByAggregateInput
   _min: WalletMinOrderByAggregateInput
+  _sum: WalletSumOrderByAggregateInput
   address: SortOrder
+  chainId: SortOrder
   createdAt: SortOrder
   createdBy: SortOrder
   deletedAt: SortOrder
@@ -1072,6 +1185,7 @@ input WalletOrderByWithAggregationInput {
 
 input WalletOrderByWithRelationInput {
   address: SortOrder
+  chainId: SortOrder
   createdAt: SortOrder
   createdBy: SortOrder
   deletedAt: SortOrder
@@ -1083,6 +1197,7 @@ input WalletOrderByWithRelationInput {
 
 enum WalletScalarFieldEnum {
   address
+  chainId
   createdAt
   createdBy
   deletedAt
@@ -1095,6 +1210,7 @@ input WalletScalarWhereWithAggregatesInput {
   NOT: [WalletScalarWhereWithAggregatesInput!]
   OR: [WalletScalarWhereWithAggregatesInput!]
   address: StringWithAggregatesFilter
+  chainId: IntWithAggregatesFilter
   createdAt: DateTimeWithAggregatesFilter
   createdBy: StringWithAggregatesFilter
   deletedAt: DateTimeWithAggregatesFilter
@@ -1102,8 +1218,17 @@ input WalletScalarWhereWithAggregatesInput {
   id: StringWithAggregatesFilter
 }
 
+type WalletSumAggregate {
+  chainId: Int
+}
+
+input WalletSumOrderByAggregateInput {
+  chainId: SortOrder
+}
+
 input WalletUpdateInput {
   address: StringFieldUpdateOperationsInput
+  chainId: IntFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: StringFieldUpdateOperationsInput
   deletedAt: DateTimeFieldUpdateOperationsInput
@@ -1114,6 +1239,7 @@ input WalletUpdateInput {
 
 input WalletUpdateManyMutationInput {
   address: StringFieldUpdateOperationsInput
+  chainId: IntFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: StringFieldUpdateOperationsInput
   deletedAt: DateTimeFieldUpdateOperationsInput
@@ -1152,6 +1278,7 @@ input WalletUpdateToOneWithWhereWithoutSocialLinksInput {
 
 input WalletUpdateWithoutEmailLinksInput {
   address: StringFieldUpdateOperationsInput
+  chainId: IntFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: StringFieldUpdateOperationsInput
   deletedAt: DateTimeFieldUpdateOperationsInput
@@ -1161,6 +1288,7 @@ input WalletUpdateWithoutEmailLinksInput {
 
 input WalletUpdateWithoutSocialLinksInput {
   address: StringFieldUpdateOperationsInput
+  chainId: IntFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: StringFieldUpdateOperationsInput
   deletedAt: DateTimeFieldUpdateOperationsInput
@@ -1185,6 +1313,7 @@ input WalletWhereInput {
   NOT: [WalletWhereInput!]
   OR: [WalletWhereInput!]
   address: StringFilter
+  chainId: IntFilter
   createdAt: DateTimeFilter
   createdBy: StringFilter
   deletedAt: DateTimeFilter
@@ -1199,6 +1328,7 @@ input WalletWhereUniqueInput {
   NOT: [WalletWhereInput!]
   OR: [WalletWhereInput!]
   address: StringFilter
+  chainId: IntFilter
   createdAt: DateTimeFilter
   createdBy: StringFilter
   deletedAt: DateTimeFilter
