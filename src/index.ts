@@ -6,14 +6,17 @@ import { startStandaloneServer } from '@apollo/server/standalone'
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import * as tq from 'type-graphql'
 import { Context, context } from './context'
-import { resolvers } from '@generated/type-graphql'
+import { resolvers } from './resolvers'
 import FlyPlugin from './providers/fly'
 
 const app = async () => {
+  const schemaPath = process.env.SHEMA_PATH || './schema.graphql'
   const schema = await tq.buildSchema({
     resolvers,
-    emitSchemaFile: process.env.SHEMA_PATH || './schema.graphql',
+    emitSchemaFile: schemaPath,
   })
+
+  console.log(`🚀 Saved schema to ${schemaPath}`)
 
   const server = new ApolloServer<Context>({ schema, introspection: true, plugins: [
     FlyPlugin,

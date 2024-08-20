@@ -17,21 +17,55 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt DateTime @default(now())
-  firstName String
-  lastName  String?
-  email     String   @unique
-  posts     Post[]
+model Wallet {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt      DateTime @default(now())
+  /// Initiator of the create action. Ex. user, admin
+  createdBy      String
+  /// soft delete, if set then deleted
+  deletedAt      DateTime
+  /// Initiator of the delete action. Ex. user, admin
+  deltedBy       String
+  
+  /// Wallet address
+  address        String
+  /// Chain id, ex. 1 for Ethereum, 56 for Binance Smart Chain
+  chainId        Int
+
+  emailLinks     EmailLink[]
+  socialLinks    SocialLink[]
 }
 
-model Post {
+model EmailLink {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now())
-  title     String
-  body      String?
-  views     Int      @default(0)
-  author    User?    @relation(fields: [authorId], references: [id])
-  authorId  String?  @db.ObjectId
+  /// Initiator of the create action. Ex. user, admin
+  createdBy      String
+  /// soft delete, if set then deleted
+  deletedAt      DateTime
+  /// Initiator of the delete action. Ex. user, admin
+  deltedBy       String
+
+  wallet    Wallet?  @relation(fields: [walletId], references: [id])
+  walletId  String?  @db.ObjectId
+  
+  email String
+}
+
+model SocialLink {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  /// Initiator of the create action. Ex. user, admin
+  createdBy      String
+  /// soft delete, if set then deleted
+  deletedAt      DateTime
+  /// Initiator of the delete action. Ex. user, admin
+  deltedBy       String
+
+  wallet    Wallet?  @relation(fields: [walletId], references: [id])
+  walletId  String?  @db.ObjectId
+  
+  /// twitter, facebook, instagram, etc.
+  platform  String 
+  username  String
 }
