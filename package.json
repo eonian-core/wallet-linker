@@ -16,7 +16,8 @@
     "postinstall": "npm run gen",
     "clean": "rm -rf dist",
     "deploy": "npm un clean && fly deploy",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "db:migration": "npx prisma db push"
   },
   "engines": {
     "node": ">=20"

@@ -18,14 +18,17 @@ datasource db {
 }
 
 model Wallet {
+  /// @TypeGraphQL.omit(output: false, input: true)
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  /// @TypeGraphQL.omit(output: false, input: true)
   createdAt      DateTime @default(now())
   /// Initiator of the create action. Ex. user, admin
   createdBy      String
   /// soft delete, if set then deleted
-  deletedAt      DateTime
+  /// @TypeGraphQL.omit(output: false, input: true)
+  deletedAt      DateTime?
   /// Initiator of the delete action. Ex. user, admin
-  deltedBy       String
+  deltedBy       String?
   
   /// Wallet address
   address        String
@@ -34,17 +37,22 @@ model Wallet {
 
   emailLinks     EmailLink[]
   socialLinks    SocialLink[]
+
+  @@unique([address, chainId])
 }
 
 model EmailLink {
+  /// @TypeGraphQL.omit(output: false, input: true)
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  /// @TypeGraphQL.omit(output: false, input: true)
   createdAt DateTime @default(now())
   /// Initiator of the create action. Ex. user, admin
   createdBy      String
   /// soft delete, if set then deleted
-  deletedAt      DateTime
+  /// @TypeGraphQL.omit(output: false, input: true)
+  deletedAt      DateTime?
   /// Initiator of the delete action. Ex. user, admin
-  deltedBy       String
+  deltedBy       String?
 
   wallet    Wallet?  @relation(fields: [walletId], references: [id])
   walletId  String?  @db.ObjectId
@@ -53,14 +61,17 @@ model EmailLink {
 }
 
 model SocialLink {
+  /// @TypeGraphQL.omit(output: false, input: true)
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  /// @TypeGraphQL.omit(output: false, input: true)
   createdAt DateTime @default(now())
   /// Initiator of the create action. Ex. user, admin
   createdBy      String
   /// soft delete, if set then deleted
-  deletedAt      DateTime
+  /// @TypeGraphQL.omit(output: false, input: true)
+  deletedAt      DateTime?
   /// Initiator of the delete action. Ex. user, admin
-  deltedBy       String
+  deltedBy       String?
 
   wallet    Wallet?  @relation(fields: [walletId], references: [id])
   walletId  String?  @db.ObjectId
