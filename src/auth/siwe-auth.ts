@@ -2,27 +2,26 @@ import { RequestHandler, Request } from "express";
 import { SiweError, SiweErrorType, SiweMessage } from 'siwe';
 import * as config from '../config';
 import { User } from "./extend-request";
+import { NonceStore, nonceStore } from "./nonce";
 
 const SIWE_AUTH_HEADER = 'x-signature';
-const SIWE_NONCE_HEADER = 'x-nonce';
-const SIWE_ADDRESS_HEADER = 'x-address';
 
-const SIGN_STATMENT = 'Sign in with wallet to Eonian'
+export const SIGN_STATMENT = 'Sign in with wallet to Eonian'
 
 
 /** Expect signaute of 'Sign in with wallet to Eonian' with "x-nonce" send in "x-signature" header */
 export const siweAuthMiddleware: RequestHandler = async (req, res, next) => {
+    const validator = new SignatureValidator(nonceStore);
+    
     const signature = req.header(SIWE_AUTH_HEADER);
-    const nonce = req.header(SIWE_NONCE_HEADER);
-    const address = req.header(SIWE_ADDRESS_HEADER);
 
-    if(!signature || !nonce || !address) {
+    if(!signature) {
         return next();
     }
 
     try {
-        const origin = getOriginalDomain(req);
-        req.user = await validateSignature(address, 56, '', '', signature, origin, nonce, config.allowedOrigins, new Date());
+        const uri = getOriginalDomain(req);
+        req.user = await validator.validateSignature({} as any, signature, uri, config.allowedOrigins, new Date());
         next();
 
         return;
@@ -55,37 +54,52 @@ export const siweAuthMiddleware: RequestHandler = async (req, res, next) => {
     
 }
 
-export const validateSignature = async (address: string, chainId: number, expiresAt: string, issuedAt: string, signature: string, uri: string, nonce: string, allowedOrigins: Array<string | RegExp>, curentTime: Date): Promise<User> => {
-    const domain = new URL(uri).host;
-    console.log('domain', domain);
-    if(!isAllowedOrigin(domain, allowedOrigins)) {
-        throw new Error('Origin not allowed');
-    }
+export class SignatureValidator {
+    private store: NonceStore;
 
-    const signMessage = new SiweMessage({uri, domain, nonce, statement: SIGN_STATMENT, version: '1', address, chainId, expirationTime: expiresAt, issuedAt  });
-    const { data: message, success, error } = await signMessage.verify({ signature, time: curentTime.toISOString() });
-    if(!success || error) {
-        throw error;
+    constructor(store: NonceStore) {
+        this.store = store;
     }
+    
+    async validateSignature(payload: Partial<SiweMessage>, signature: string, uri: string, allowedOrigins: Array<string | RegExp>, curentTime: Date): Promise<User> {
+        const signMessage = new SiweMessage(payload);
+        const { data: message, success, error } = await signMessage.verify({ signature, time: curentTime.toISOString() });
+        if(!success || error) {
+            throw error;
+        }
 
-    if(message.uri !== uri) {
-        throw new Error('URI does not match provided URI for verification.')
-    }
-
-    if (message.notBefore && new Date(message.notBefore).getTime() > curentTime.getTime()) {
-        throw new Error('Message not yet valid')
-    }
-
-    if (message.expirationTime && new Date(message.expirationTime).getTime() < curentTime.getTime()) {
-        throw new Error('Message expired')
-    }
-
-    return {
-        wallet: {
-            address: message.address,
-            signature,
-            nonce,
-            chainId: message.chainId
+        if(!this.store.isExist(message.nonce)) {
+            throw new Error('Nonce not exists or expired');
+        }
+    
+        if(message.statement !== SIGN_STATMENT) {
+            throw new Error('Invalid statement')
+        }
+    
+        if(message.uri !== uri) {
+            throw new Error('URI does not match provided URI for verification.')
+        }
+    
+        const domain = new URL(uri).host;
+        if(!isAllowedOrigin(domain, allowedOrigins)) {
+            throw new Error('Origin not allowed');
+        }
+    
+        if (message.notBefore && new Date(message.notBefore).getTime() > curentTime.getTime()) {
+            throw new Error('Message not yet valid')
+        }
+    
+        if (message.expirationTime && new Date(message.expirationTime).getTime() < curentTime.getTime()) {
+            throw new Error('Message expired')
+        }
+    
+        return {
+            wallet: {
+                address: message.address,
+                signature,
+                nonce: message.nonce,
+                chainId: message.chainId
+            }
         }
     }
 }

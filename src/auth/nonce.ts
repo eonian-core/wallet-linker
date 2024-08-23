@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import { generateNonce, SiweMessage } from 'siwe';
 
-class Store {
+export class NonceStore {
     data: Array<string> = []
     
     public add(value: string) {
@@ -13,12 +13,12 @@ class Store {
     }
 }
 
-const store = new Store();
+export const nonceStore = new NonceStore();
 
 export const nonceHandler: RequestHandler = async (req, res) => {
     const nonce = generateNonce();
 
-    store.add(nonce);
+    nonceStore.add(nonce);
     
     res.status(200).json({nonce});
 }
