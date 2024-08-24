@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
-import { SIGN_STATMENT, SignatureValidator } from '../siwe-auth';
 import { SiweMessage } from 'siwe';
 import { NonceStore } from '../nonce';
+import { SignatureValidator, SIGN_STATMENT } from '../signature-validator';
 
 describe('SignatureValidator', () => {
 
