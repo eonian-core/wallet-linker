@@ -1,7 +1,7 @@
 import { RequestHandler, Request } from "express";
 import { SiweError, SiweErrorType, SiweMessage } from 'siwe';
 import * as config from '../config';
-import { User } from "./extend-request";
+import { UserWallet } from "./extend-request";
 import { NonceStore, nonceStore } from "./nonce";
 
 const SIWE_AUTH_HEADER = 'x-signature';
@@ -21,7 +21,7 @@ export const siweAuthMiddleware: RequestHandler = async (req, res, next) => {
 
     try {
         const uri = getOriginalDomain(req);
-        req.user = await validator.validateSignature({} as any, signature, uri, config.allowedOrigins, new Date());
+        req.wallet = await validator.validateSignature({} as any, signature, uri, config.allowedOrigins, new Date());
         next();
 
         return;
@@ -36,17 +36,19 @@ export const siweAuthMiddleware: RequestHandler = async (req, res, next) => {
             return res.status(403).json({ message: (error as Error)?.message || error });
         }
 
+        const errorMessage = {message: error.type};
+
         switch (error.type) {
             case SiweErrorType.EXPIRED_MESSAGE: {
-                res.status(440).json({ message: '`expirationTime` is present and in the past.' })
+                res.status(440).json(errorMessage)
                 return;
             }
             case SiweErrorType.INVALID_SIGNATURE: {
-                res.status(422).json({ message: `Signature doesn't match the address of the message.` })
+                res.status(422).json(errorMessage)
                 return;
             }
             default: {
-                res.status(403).json({ message: error.type })
+                res.status(403).json(errorMessage)
                 return
             }
         }
@@ -61,7 +63,7 @@ export class SignatureValidator {
         this.store = store;
     }
     
-    async validateSignature(payload: Partial<SiweMessage>, signature: string, uri: string, allowedOrigins: Array<string | RegExp>, curentTime: Date): Promise<User> {
+    async validateSignature(payload: Partial<SiweMessage>, signature: string, uri: string, allowedOrigins: Array<string | RegExp>, curentTime: Date): Promise<UserWallet> {
         const signMessage = new SiweMessage(payload);
         const { data: message, success, error } = await signMessage.verify({ signature, time: curentTime.toISOString() });
         if(!success || error) {
@@ -81,12 +83,28 @@ export class SignatureValidator {
         }
     
         const domain = new URL(uri).host;
+        if(message.domain !== domain) {
+            throw new Error('Domain does not match provided domain for verification.')
+        }
+
         if(!isAllowedOrigin(domain, allowedOrigins)) {
             throw new Error('Origin not allowed');
+        }
+
+        if(!message.issuedAt) {
+            throw new Error('Message not have issued time')
+        }
+
+        if(new Date(message.issuedAt).getTime() > curentTime.getTime()) {
+            throw new Error('Message not yet issued')
         }
     
         if (message.notBefore && new Date(message.notBefore).getTime() > curentTime.getTime()) {
             throw new Error('Message not yet valid')
+        }
+
+        if(!message.expirationTime) {
+            throw new Error('Message not have expiration time')
         }
     
         if (message.expirationTime && new Date(message.expirationTime).getTime() < curentTime.getTime()) {
@@ -94,12 +112,10 @@ export class SignatureValidator {
         }
     
         return {
-            wallet: {
-                address: message.address,
-                signature,
-                nonce: message.nonce,
-                chainId: message.chainId
-            }
+            address: message.address,
+            signature,
+            nonce: message.nonce,
+            chainId: message.chainId
         }
     }
 }

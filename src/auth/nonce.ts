@@ -11,6 +11,10 @@ export class NonceStore {
     public isExist(value: string) {
         return this.data.includes(value);
     }
+
+    public remove(value: string) {
+        this.data = this.data.filter(v => v !== value);
+    }
 }
 
 export const nonceStore = new NonceStore();
