@@ -70,6 +70,9 @@ export class SignatureValidator {
             throw error;
         }
 
+        // message is signed correctly
+        // need check payload for validity
+
         if(!this.store.isExist(message.nonce)) {
             throw new Error('Nonce not exists or expired');
         }
