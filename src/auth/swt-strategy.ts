@@ -1,4 +1,3 @@
-import { config } from "dotenv";
 import { Request, Response, NextFunction } from "express";
 import { SiweError, SiweErrorType } from 'siwe';
 import { SignatureTokenDecoder } from "./signature-token-decoder";
@@ -8,18 +7,18 @@ import { SignatureValidator } from "./signature-validator";
 // TODO: siwtch to authorization header
 const SIWE_AUTH_HEADER = 'x-signature';
 
-export interface SiweJwtStrategyOptions {
+export interface SwtStrategyOptions {
     skipOnMissingSignature?: boolean;
     allowedOrigins: Array<string | RegExp>; 
 }
 
-/** SIWE authentiacation strategy that uses JWT-like approach for authneticaiton */
-export class SiweJwtStrategy {
+/** SWT Strategy: SIWE authentiacation strategy that uses JWT-like approach for authneticaiton */
+export class SwtStrategy {
 
     constructor(
         private validator: SignatureValidator,
         private decoder: SignatureTokenDecoder,
-        private options: SiweJwtStrategyOptions
+        private options: SwtStrategyOptions
     ) {}
 
     async authenticate(req: Request, res: Response, next: NextFunction) {

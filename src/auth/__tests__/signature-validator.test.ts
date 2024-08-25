@@ -62,7 +62,8 @@ describe('SignatureValidator', () => {
 
     it('should throw error if nonce does not exist', async () => {
         store.remove(nonce);
-        await expect(async () => await validator.validateSignature(payload, signature, uri, allowedOrigins, currentTime)).rejects.toThrow('Nonce not exists or expired');
+        await expect(async () => await validator.validateSignature(payload, signature, uri, allowedOrigins, currentTime))
+          .rejects.toThrow(`Nonce ${nonce} not exists or expired`);
     });
 
     it('should throw error if statement is invalid', async () => {
@@ -79,7 +80,8 @@ describe('SignatureValidator', () => {
 
     it('should throw error if URI does not match', async () => {
         const invalidUri = 'http://invalid.com';
-        await expect(async () => await validator.validateSignature(payload, signature, invalidUri, allowedOrigins, currentTime)).rejects.toThrow('URI does not match provided URI for verification.');
+        await expect(async () => await validator.validateSignature(payload, signature, invalidUri, allowedOrigins, currentTime))
+          .rejects.toThrow(`Request URI ${invalidUri} does not match provided URI ${payload.uri} for verification.`);
     });
 
     it('should throw error if domain does not match', async () => {
