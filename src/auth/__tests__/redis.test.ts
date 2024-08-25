@@ -13,6 +13,19 @@ describe('splitRedisUrl', () => {
         });
     });
 
+    it('should correctly split a valid Redis URL with params', () => {
+        const url = 'redis://username:password@localhost:6379?family=6';
+        const result = splitRedisUrl(url);
+        expect(result).toEqual({
+            host: 'localhost',
+            port: 6379,
+            username: 'username',
+            password: 'password',
+            family: 6
+        });
+    });
+
+
     it('should throw an error for an invalid Redis URL', () => {
         const url = 'invalid-url';
         expect(() => splitRedisUrl(url)).toThrow('Invalid Redis URL');

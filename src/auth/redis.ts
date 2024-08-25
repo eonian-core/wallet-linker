@@ -1,4 +1,5 @@
 import KeyvRedis from "@keyv/redis"
+import URL from 'url';
 import Redis, { RedisOptions } from "ioredis"
 import { SwtAuth, SwtAuthOptions } from "./swt-auth";
 
@@ -9,22 +10,31 @@ export class SwtRedisAuth extends SwtAuth {
         // need split it into params
         const redisOptions = splitRedisUrl(redisUrl)
         const redis = new Redis(redisOptions);
-        
+
         const store = new KeyvRedis(redis)
         super(store, options)
     }
 }
 
 export const splitRedisUrl = (url: string): RedisOptions => {
-    const match = url.match(/redis:\/\/(.*):(.*)@(.*):(.*)/);
-    if (!match) {
+    const parsedUrl = URL.parse(url, true); // The second parameter enables query string parsing
+
+    if (!parsedUrl.hostname || !parsedUrl.port || !parsedUrl.auth) {
         throw new Error('Invalid Redis URL');
     }
-    const [_, username, password, host, port] = match;
-    return {
-        host,
-        port: parseInt(port),
-        username,
-        password
+
+    const [username, password] = parsedUrl.auth.split(':');
+
+    const query: any = { ...parsedUrl.query };
+    if (query.family) {
+        query.family = Number(query.family);
     }
+
+    return {
+        host: parsedUrl.hostname,
+        port: Number(parsedUrl.port),
+        username,
+        password,
+        ...query
+    };
 }
