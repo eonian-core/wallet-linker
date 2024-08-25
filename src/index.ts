@@ -1,39 +1,37 @@
 import 'reflect-metadata'
 import 'dotenv/config'
 
-import { ApolloServer } from '@apollo/server'
-import { startStandaloneServer } from '@apollo/server/standalone'
-import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
-import * as tq from 'type-graphql'
-import { Context, context } from './context'
-import { resolvers } from './resolvers'
-import FlyPlugin from './providers/fly'
+import cors from 'cors'
+import express from 'express';
 
-const app = async () => {
-  const schemaPath = process.env.SHEMA_PATH || './schema.graphql'
-  const schema = await tq.buildSchema({
-    resolvers,
-    emitSchemaFile: schemaPath,
+import { startGraphql } from './graphql';
+import { startExpress } from './express';
+import * as config from './config';
+import { SwtRedisAuth } from './auth/redis';
+
+const startApp = async () => {
+  const app: express.Express = express();
+
+  app.use(express.json({ limit: '50mb' }))
+  app.use(cors({ origin: config.allowedOrigins }))
+
+  const auth = new SwtRedisAuth(config.redisUrl, {
+    ttl: config.nonceTtl,
+    skipOnMissingSignature: true,
+    allowedOrigins: config.allowedOrigins
   })
 
-  console.log(`🚀 Saved schema to ${schemaPath}`)
+  app.use(auth.middleware())
+  // allow to get nonce for signature verification
+  app.get('/nonce', auth.nonceHandler()) 
 
-  const server = new ApolloServer<Context>({ schema, introspection: true, plugins: [
-    FlyPlugin,
-    ApolloServerPluginLandingPageLocalDefault() // enable playground in all environments
-  ]})
+  await startGraphql(app, '/graphql')
 
-  const { url } = await startStandaloneServer(server, { 
-    listen: { 
-        port: +(process.env.PORT || "4000")
-    },
-    context: async () => context 
-  })
-
+  const { url } = await startExpress(app, config.port)
   console.log(`
     🚀 Server ready at: ${url}
     ⭐️  See sample queries: http://pris.ly/e/ts/graphql-typegraphql#using-the-graphql-api`
   )
 }
 
-app()
+void startApp()

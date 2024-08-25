@@ -3,21 +3,6 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
-input DateTimeFieldUpdateOperationsInput {
-  set: DateTimeISO
-}
-
-input DateTimeFilter {
-  equals: DateTimeISO
-  gt: DateTimeISO
-  gte: DateTimeISO
-  in: [DateTimeISO!]
-  lt: DateTimeISO
-  lte: DateTimeISO
-  not: NestedDateTimeFilter
-  notIn: [DateTimeISO!]
-}
-
 """
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.This scalar is serialized to a string in ISO 8601 format and parsed from a string in ISO 8601 format.
 """
@@ -30,10 +15,10 @@ type EmailLink {
   createdBy: String!
 
   """soft delete, if set then deleted"""
-  deletedAt: DateTimeISO!
+  deletedAt: DateTimeISO
 
   """Initiator of the delete action. Ex. user, admin"""
-  deltedBy: String!
+  deltedBy: String
   email: String!
   id: String!
   wallet(where: WalletWhereInput): Wallet
@@ -41,22 +26,16 @@ type EmailLink {
 }
 
 input EmailLinkCreateInput {
-  createdAt: DateTimeISO
   createdBy: String!
-  deletedAt: DateTimeISO!
-  deltedBy: String!
+  deltedBy: String
   email: String!
-  id: String
   wallet: WalletCreateNestedOneWithoutEmailLinksInput
 }
 
 input EmailLinkCreateManyWalletInput {
-  createdAt: DateTimeISO
   createdBy: String!
-  deletedAt: DateTimeISO!
-  deltedBy: String!
+  deltedBy: String
   email: String!
-  id: String
 }
 
 input EmailLinkCreateManyWalletInputEnvelope {
@@ -76,12 +55,9 @@ input EmailLinkCreateOrConnectWithoutWalletInput {
 }
 
 input EmailLinkCreateWithoutWalletInput {
-  createdAt: DateTimeISO
   createdBy: String!
-  deletedAt: DateTimeISO!
-  deltedBy: String!
+  deltedBy: String
   email: String!
-  id: String
 }
 
 input EmailLinkListRelationFilter {
@@ -95,12 +71,9 @@ input EmailLinkOrderByRelationAggregateInput {
 }
 
 input EmailLinkOrderByWithRelationInput {
-  createdAt: SortOrder
   createdBy: SortOrder
-  deletedAt: SortOrder
   deltedBy: SortOrder
   email: SortOrder
-  id: SortOrder
   wallet: WalletOrderByWithRelationInput
   walletId: SortOrder
 }
@@ -119,29 +92,22 @@ input EmailLinkScalarWhereInput {
   AND: [EmailLinkScalarWhereInput!]
   NOT: [EmailLinkScalarWhereInput!]
   OR: [EmailLinkScalarWhereInput!]
-  createdAt: DateTimeFilter
   createdBy: StringFilter
-  deletedAt: DateTimeFilter
-  deltedBy: StringFilter
+  deltedBy: StringNullableFilter
   email: StringFilter
-  id: StringFilter
   walletId: StringNullableFilter
 }
 
 input EmailLinkUpdateInput {
-  createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: StringFieldUpdateOperationsInput
-  deletedAt: DateTimeFieldUpdateOperationsInput
-  deltedBy: StringFieldUpdateOperationsInput
+  deltedBy: NullableStringFieldUpdateOperationsInput
   email: StringFieldUpdateOperationsInput
   wallet: WalletUpdateOneWithoutEmailLinksNestedInput
 }
 
 input EmailLinkUpdateManyMutationInput {
-  createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: StringFieldUpdateOperationsInput
-  deletedAt: DateTimeFieldUpdateOperationsInput
-  deltedBy: StringFieldUpdateOperationsInput
+  deltedBy: NullableStringFieldUpdateOperationsInput
   email: StringFieldUpdateOperationsInput
 }
 
@@ -170,10 +136,8 @@ input EmailLinkUpdateWithWhereUniqueWithoutWalletInput {
 }
 
 input EmailLinkUpdateWithoutWalletInput {
-  createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: StringFieldUpdateOperationsInput
-  deletedAt: DateTimeFieldUpdateOperationsInput
-  deltedBy: StringFieldUpdateOperationsInput
+  deltedBy: NullableStringFieldUpdateOperationsInput
   email: StringFieldUpdateOperationsInput
 }
 
@@ -187,12 +151,9 @@ input EmailLinkWhereInput {
   AND: [EmailLinkWhereInput!]
   NOT: [EmailLinkWhereInput!]
   OR: [EmailLinkWhereInput!]
-  createdAt: DateTimeFilter
   createdBy: StringFilter
-  deletedAt: DateTimeFilter
-  deltedBy: StringFilter
+  deltedBy: StringNullableFilter
   email: StringFilter
-  id: StringFilter
   wallet: WalletNullableRelationFilter
   walletId: StringNullableFilter
 }
@@ -201,12 +162,9 @@ input EmailLinkWhereUniqueInput {
   AND: [EmailLinkWhereInput!]
   NOT: [EmailLinkWhereInput!]
   OR: [EmailLinkWhereInput!]
-  createdAt: DateTimeFilter
   createdBy: StringFilter
-  deletedAt: DateTimeFilter
-  deltedBy: StringFilter
+  deltedBy: StringNullableFilter
   email: StringFilter
-  id: String
   wallet: WalletNullableRelationFilter
   walletId: StringNullableFilter
 }
@@ -237,17 +195,6 @@ type Mutation {
   updateOneEmailLink(data: EmailLinkUpdateInput!, where: EmailLinkWhereUniqueInput!): EmailLink
   updateOneSocialLink(data: SocialLinkUpdateInput!, where: SocialLinkWhereUniqueInput!): SocialLink
   updateOneWallet(data: WalletUpdateInput!, where: WalletWhereUniqueInput!): Wallet
-}
-
-input NestedDateTimeFilter {
-  equals: DateTimeISO
-  gt: DateTimeISO
-  gte: DateTimeISO
-  in: [DateTimeISO!]
-  lt: DateTimeISO
-  lte: DateTimeISO
-  not: NestedDateTimeFilter
-  notIn: [DateTimeISO!]
 }
 
 input NestedIntFilter {
@@ -290,6 +237,11 @@ input NestedStringNullableFilter {
   startsWith: String
 }
 
+input NullableStringFieldUpdateOperationsInput {
+  set: String
+  unset: Boolean
+}
+
 type Query {
   emailLink(where: EmailLinkWhereUniqueInput!): EmailLink
   emailLinks(cursor: EmailLinkWhereUniqueInput, distinct: [EmailLinkScalarFieldEnum!], orderBy: [EmailLinkOrderByWithRelationInput!], skip: Int, take: Int, where: EmailLinkWhereInput): [EmailLink!]!
@@ -311,10 +263,10 @@ type SocialLink {
   createdBy: String!
 
   """soft delete, if set then deleted"""
-  deletedAt: DateTimeISO!
+  deletedAt: DateTimeISO
 
   """Initiator of the delete action. Ex. user, admin"""
-  deltedBy: String!
+  deltedBy: String
   id: String!
 
   """twitter, facebook, instagram, etc."""
@@ -325,22 +277,16 @@ type SocialLink {
 }
 
 input SocialLinkCreateInput {
-  createdAt: DateTimeISO
   createdBy: String!
-  deletedAt: DateTimeISO!
-  deltedBy: String!
-  id: String
+  deltedBy: String
   platform: String!
   username: String!
   wallet: WalletCreateNestedOneWithoutSocialLinksInput
 }
 
 input SocialLinkCreateManyWalletInput {
-  createdAt: DateTimeISO
   createdBy: String!
-  deletedAt: DateTimeISO!
-  deltedBy: String!
-  id: String
+  deltedBy: String
   platform: String!
   username: String!
 }
@@ -362,11 +308,8 @@ input SocialLinkCreateOrConnectWithoutWalletInput {
 }
 
 input SocialLinkCreateWithoutWalletInput {
-  createdAt: DateTimeISO
   createdBy: String!
-  deletedAt: DateTimeISO!
-  deltedBy: String!
-  id: String
+  deltedBy: String
   platform: String!
   username: String!
 }
@@ -382,11 +325,8 @@ input SocialLinkOrderByRelationAggregateInput {
 }
 
 input SocialLinkOrderByWithRelationInput {
-  createdAt: SortOrder
   createdBy: SortOrder
-  deletedAt: SortOrder
   deltedBy: SortOrder
-  id: SortOrder
   platform: SortOrder
   username: SortOrder
   wallet: WalletOrderByWithRelationInput
@@ -408,31 +348,24 @@ input SocialLinkScalarWhereInput {
   AND: [SocialLinkScalarWhereInput!]
   NOT: [SocialLinkScalarWhereInput!]
   OR: [SocialLinkScalarWhereInput!]
-  createdAt: DateTimeFilter
   createdBy: StringFilter
-  deletedAt: DateTimeFilter
-  deltedBy: StringFilter
-  id: StringFilter
+  deltedBy: StringNullableFilter
   platform: StringFilter
   username: StringFilter
   walletId: StringNullableFilter
 }
 
 input SocialLinkUpdateInput {
-  createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: StringFieldUpdateOperationsInput
-  deletedAt: DateTimeFieldUpdateOperationsInput
-  deltedBy: StringFieldUpdateOperationsInput
+  deltedBy: NullableStringFieldUpdateOperationsInput
   platform: StringFieldUpdateOperationsInput
   username: StringFieldUpdateOperationsInput
   wallet: WalletUpdateOneWithoutSocialLinksNestedInput
 }
 
 input SocialLinkUpdateManyMutationInput {
-  createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: StringFieldUpdateOperationsInput
-  deletedAt: DateTimeFieldUpdateOperationsInput
-  deltedBy: StringFieldUpdateOperationsInput
+  deltedBy: NullableStringFieldUpdateOperationsInput
   platform: StringFieldUpdateOperationsInput
   username: StringFieldUpdateOperationsInput
 }
@@ -462,10 +395,8 @@ input SocialLinkUpdateWithWhereUniqueWithoutWalletInput {
 }
 
 input SocialLinkUpdateWithoutWalletInput {
-  createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: StringFieldUpdateOperationsInput
-  deletedAt: DateTimeFieldUpdateOperationsInput
-  deltedBy: StringFieldUpdateOperationsInput
+  deltedBy: NullableStringFieldUpdateOperationsInput
   platform: StringFieldUpdateOperationsInput
   username: StringFieldUpdateOperationsInput
 }
@@ -480,11 +411,8 @@ input SocialLinkWhereInput {
   AND: [SocialLinkWhereInput!]
   NOT: [SocialLinkWhereInput!]
   OR: [SocialLinkWhereInput!]
-  createdAt: DateTimeFilter
   createdBy: StringFilter
-  deletedAt: DateTimeFilter
-  deltedBy: StringFilter
-  id: StringFilter
+  deltedBy: StringNullableFilter
   platform: StringFilter
   username: StringFilter
   wallet: WalletNullableRelationFilter
@@ -495,11 +423,8 @@ input SocialLinkWhereUniqueInput {
   AND: [SocialLinkWhereInput!]
   NOT: [SocialLinkWhereInput!]
   OR: [SocialLinkWhereInput!]
-  createdAt: DateTimeFilter
   createdBy: StringFilter
-  deletedAt: DateTimeFilter
-  deltedBy: StringFilter
-  id: String
+  deltedBy: StringNullableFilter
   platform: StringFilter
   username: StringFilter
   wallet: WalletNullableRelationFilter
@@ -560,13 +485,18 @@ type Wallet {
   createdBy: String!
 
   """soft delete, if set then deleted"""
-  deletedAt: DateTimeISO!
+  deletedAt: DateTimeISO
 
   """Initiator of the delete action. Ex. user, admin"""
-  deltedBy: String!
+  deltedBy: String
   emailLinks(cursor: EmailLinkWhereUniqueInput, distinct: [EmailLinkScalarFieldEnum!], orderBy: [EmailLinkOrderByWithRelationInput!], skip: Int, take: Int, where: EmailLinkWhereInput): [EmailLink!]!
   id: String!
   socialLinks(cursor: SocialLinkWhereUniqueInput, distinct: [SocialLinkScalarFieldEnum!], orderBy: [SocialLinkOrderByWithRelationInput!], skip: Int, take: Int, where: SocialLinkWhereInput): [SocialLink!]!
+}
+
+input WalletAddressChainIdCompoundUniqueInput {
+  address: String!
+  chainId: Int!
 }
 
 type WalletCount {
@@ -577,12 +507,9 @@ type WalletCount {
 input WalletCreateInput {
   address: String!
   chainId: Int!
-  createdAt: DateTimeISO
   createdBy: String!
-  deletedAt: DateTimeISO!
-  deltedBy: String!
+  deltedBy: String
   emailLinks: EmailLinkCreateNestedManyWithoutWalletInput
-  id: String
   socialLinks: SocialLinkCreateNestedManyWithoutWalletInput
 }
 
@@ -611,23 +538,17 @@ input WalletCreateOrConnectWithoutSocialLinksInput {
 input WalletCreateWithoutEmailLinksInput {
   address: String!
   chainId: Int!
-  createdAt: DateTimeISO
   createdBy: String!
-  deletedAt: DateTimeISO!
-  deltedBy: String!
-  id: String
+  deltedBy: String
   socialLinks: SocialLinkCreateNestedManyWithoutWalletInput
 }
 
 input WalletCreateWithoutSocialLinksInput {
   address: String!
   chainId: Int!
-  createdAt: DateTimeISO
   createdBy: String!
-  deletedAt: DateTimeISO!
-  deltedBy: String!
+  deltedBy: String
   emailLinks: EmailLinkCreateNestedManyWithoutWalletInput
-  id: String
 }
 
 input WalletNullableRelationFilter {
@@ -638,12 +559,9 @@ input WalletNullableRelationFilter {
 input WalletOrderByWithRelationInput {
   address: SortOrder
   chainId: SortOrder
-  createdAt: SortOrder
   createdBy: SortOrder
-  deletedAt: SortOrder
   deltedBy: SortOrder
   emailLinks: EmailLinkOrderByRelationAggregateInput
-  id: SortOrder
   socialLinks: SocialLinkOrderByRelationAggregateInput
 }
 
@@ -660,10 +578,8 @@ enum WalletScalarFieldEnum {
 input WalletUpdateInput {
   address: StringFieldUpdateOperationsInput
   chainId: IntFieldUpdateOperationsInput
-  createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: StringFieldUpdateOperationsInput
-  deletedAt: DateTimeFieldUpdateOperationsInput
-  deltedBy: StringFieldUpdateOperationsInput
+  deltedBy: NullableStringFieldUpdateOperationsInput
   emailLinks: EmailLinkUpdateManyWithoutWalletNestedInput
   socialLinks: SocialLinkUpdateManyWithoutWalletNestedInput
 }
@@ -701,20 +617,16 @@ input WalletUpdateToOneWithWhereWithoutSocialLinksInput {
 input WalletUpdateWithoutEmailLinksInput {
   address: StringFieldUpdateOperationsInput
   chainId: IntFieldUpdateOperationsInput
-  createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: StringFieldUpdateOperationsInput
-  deletedAt: DateTimeFieldUpdateOperationsInput
-  deltedBy: StringFieldUpdateOperationsInput
+  deltedBy: NullableStringFieldUpdateOperationsInput
   socialLinks: SocialLinkUpdateManyWithoutWalletNestedInput
 }
 
 input WalletUpdateWithoutSocialLinksInput {
   address: StringFieldUpdateOperationsInput
   chainId: IntFieldUpdateOperationsInput
-  createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: StringFieldUpdateOperationsInput
-  deletedAt: DateTimeFieldUpdateOperationsInput
-  deltedBy: StringFieldUpdateOperationsInput
+  deltedBy: NullableStringFieldUpdateOperationsInput
   emailLinks: EmailLinkUpdateManyWithoutWalletNestedInput
 }
 
@@ -736,12 +648,9 @@ input WalletWhereInput {
   OR: [WalletWhereInput!]
   address: StringFilter
   chainId: IntFilter
-  createdAt: DateTimeFilter
   createdBy: StringFilter
-  deletedAt: DateTimeFilter
-  deltedBy: StringFilter
+  deltedBy: StringNullableFilter
   emailLinks: EmailLinkListRelationFilter
-  id: StringFilter
   socialLinks: SocialLinkListRelationFilter
 }
 
@@ -750,12 +659,10 @@ input WalletWhereUniqueInput {
   NOT: [WalletWhereInput!]
   OR: [WalletWhereInput!]
   address: StringFilter
+  address_chainId: WalletAddressChainIdCompoundUniqueInput
   chainId: IntFilter
-  createdAt: DateTimeFilter
   createdBy: StringFilter
-  deletedAt: DateTimeFilter
-  deltedBy: StringFilter
+  deltedBy: StringNullableFilter
   emailLinks: EmailLinkListRelationFilter
-  id: String
   socialLinks: SocialLinkListRelationFilter
 }

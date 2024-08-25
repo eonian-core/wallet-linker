@@ -11,3 +11,13 @@ services:
       INIT_WAIT_SEC: 3
     ports:
       - 27017:27017
+  
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_PASSWORD=prisma
+      - REDIS_PORT=6379
+      - REDIS_DATABASES=16
