@@ -7,7 +7,7 @@ import express from 'express';
 import { startGraphql } from './graphql';
 import { startExpress } from './express';
 import * as config from './config';
-import { SwtRedisAuth } from './auth/swt-auth';
+import { SwtRedisAuth } from './auth/redis';
 
 const startApp = async () => {
   const app: express.Express = express();

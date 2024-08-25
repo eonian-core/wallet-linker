@@ -4,7 +4,7 @@ import { NonceGenerator, NonceStore } from "./nonce"
 import { SignatureTokenDecoder } from "./signature-token-decoder"
 import { SignatureValidator } from "./signature-validator"
 import { RequestHandler } from "express"
-import KeyvRedis from "@keyv/redis"
+
 
 export interface SwtAuthOptions extends SwtStrategyOptions {
     ttl: number
@@ -43,9 +43,3 @@ export class SwtAuth {
     }
 }
 
-export class SwtRedisAuth extends SwtAuth {
-    constructor(redisUrl: string, options: SwtAuthOptions){
-        const redis = new KeyvRedis(redisUrl)
-        super(redis, options)
-    }
-}
