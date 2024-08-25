@@ -18,11 +18,10 @@ export class SignatureValidator {
         if(!success || error) {
             throw error;
         }
-
         // message is signed correctly
         // need check payload for validity
 
-        if(!this.store.isExist(message.nonce)) {
+        if(!(await this.store.isExist(message.nonce))) {
             throw new Error(`Nonce ${message.nonce} not exists or expired`);
         }
     

@@ -7,25 +7,23 @@ import express from 'express';
 import { startGraphql } from './graphql';
 import { startExpress } from './express';
 import * as config from './config';
-import { nonceHandler } from './auth/nonce';
-import { siweAuth } from './auth/siwe-auth';
-
-console.log(`Starting server in ${config.isProduction ? 'production' : 'development'} mode`)
+import { SwtRedisAuth } from './auth/swt-auth';
 
 const startApp = async () => {
-
   const app: express.Express = express();
 
   app.use(express.json({ limit: '50mb' }))
   app.use(cors({ origin: config.allowedOrigins }))
 
-  app.use(siweAuth({
-    skipOnMissingSignature: true, 
+  const auth = new SwtRedisAuth(config.redisUrl, {
+    ttl: config.nonceTtl,
+    skipOnMissingSignature: true,
     allowedOrigins: config.allowedOrigins
-  }))
+  })
 
+  app.use(auth.middleware())
   // allow to get nonce for signature verification
-  app.get('/nonce', nonceHandler) 
+  app.get('/nonce', auth.nonceHandler()) 
 
   await startGraphql(app, '/graphql')
 
@@ -36,6 +34,4 @@ const startApp = async () => {
   )
 }
 
-startApp()
-
-
+void startApp()

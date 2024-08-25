@@ -1,28 +1,31 @@
-import { RequestHandler } from "express";
-import { generateNonce, SiweMessage } from 'siwe';
+import Keyv from 'keyv';
+import { Request, Response } from "express";
+import { generateNonce } from 'siwe';
 
 export class NonceStore {
-    data: Array<string> = []
+    constructor(private store: Keyv) {}
     
-    public add(value: string) {
-        this.data.push(value);
+    public async add(value: string) {
+        return await this.store.set(value, "true");
     }
 
-    public isExist(value: string) {
-        return this.data.includes(value);
+    public async isExist(value: string) {
+        return (await this.store.get(value)) === 'true';
     }
 
-    public remove(value: string) {
-        this.data = this.data.filter(v => v !== value);
+    public async remove(value: string) {
+        return await this.store.delete(value);
     }
 }
 
-export const nonceStore = new NonceStore();
+export class NonceGenerator {
+    constructor(private store: NonceStore) {}
 
-export const nonceHandler: RequestHandler = async (req, res) => {
-    const nonce = generateNonce();
+    public async generateNonce(req: Request, res: Response) {
+        const nonce = generateNonce();
 
-    nonceStore.add(nonce);
-    
-    res.status(200).json({nonce});
+        await this.store.add(nonce);
+        
+        res.status(200).json({nonce});
+    }
 }

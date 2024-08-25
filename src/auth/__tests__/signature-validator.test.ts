@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { SiweMessage } from 'siwe';
 import { NonceStore } from '../nonce';
 import { SignatureValidator, SIGN_STATMENT } from '../signature-validator';
+import Keyv from 'keyv';
 
 describe('SignatureValidator', () => {
 
@@ -21,7 +22,7 @@ describe('SignatureValidator', () => {
     let payload: Partial<SiweMessage>
 
     beforeEach(() => {
-      store = new NonceStore()
+      store = new NonceStore(new Keyv())
       store.add(nonce);
 
       validator = new SignatureValidator(store);
@@ -122,7 +123,7 @@ describe('SignatureValidator', () => {
     let payload: Partial<SiweMessage>
 
     beforeEach(() => {
-      store = new NonceStore()
+      store = new NonceStore(new Keyv())
       store.add(nonce);
 
       validator = new SignatureValidator(store);
