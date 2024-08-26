@@ -200,6 +200,7 @@ type Wallet {
   deltedBy: String
   emailLinks: [EmailLink!]!
   id: String!
+  preview: WalletPreview!
   socialLinks: [SocialLink!]!
 }
 

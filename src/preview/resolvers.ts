@@ -4,6 +4,7 @@ import { EmailLinkPreview, WalletPreview } from "./preview.models";
 import { Context } from "../context";
 import { maskEmailForPreview } from "./mask-email";
 import { isNotSoftDeleted } from "../soft-delete";
+import { Wallet } from "../generated/type-graphql";
 
 @TypeGraphQL.ArgsType()
 export class FindUniqueWalletPreviewArgs {
@@ -44,6 +45,20 @@ export class FindUniqueWalletPreviewResolver {
     }
 }
 
+@TypeGraphQL.Resolver(_of => Wallet)
+export class WalletRelationsToPreviewResolver {
+    @TypeGraphQL.FieldResolver(_type => WalletPreview, {
+        nullable: false
+    })
+    async preview(@TypeGraphQL.Root() wallet: Wallet, @TypeGraphQL.Ctx() ctx: Context, @TypeGraphQL.Info() info: GraphQLResolveInfo): Promise<WalletPreview> {
+        return {
+            id: wallet.id,
+            address: wallet.address,
+            chainId: wallet.chainId,
+        }
+    }
+}
+
 @TypeGraphQL.Resolver(_of => WalletPreview)
 export class WalletPreviewRelationsResolver {
     @TypeGraphQL.FieldResolver(_type => EmailLinkPreview, {
@@ -66,3 +81,5 @@ export class WalletPreviewRelationsResolver {
         }
     }
 }
+
+
