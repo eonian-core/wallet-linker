@@ -1,7 +1,7 @@
 import * as TypeGraphQL from "type-graphql";
 import { Authorized } from "type-graphql";
 import type { GraphQLResolveInfo } from "graphql";
-import { EmailLink } from "../resolvers/generated";
+import { EmailLink } from "../generated/type-graphql";
 import { Context } from "../context";
 import { Roles } from "../auth/wallet-auth-checker";
 

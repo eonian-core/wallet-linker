@@ -1,6 +1,6 @@
-import { FindUniqueWalletResolver, WalletRelationsResolver } from "../wallet/resolvers";
-import { FindUniqueWalletPreviewResolver, WalletPreviewRelationsResolver } from "../preview/resolvers";
-import { LinkWalletToEmailResolver } from "../emailLink/resolvers";
+import { FindUniqueWalletResolver, WalletRelationsResolver } from "./wallet/resolvers";
+import { FindUniqueWalletPreviewResolver, WalletPreviewRelationsResolver } from "./preview/resolvers";
+import { LinkWalletToEmailResolver } from "./emailLink/resolvers";
 
 type NonEmptyArray<T> = readonly [T, ...T[]] | [T, ...T[]];
 

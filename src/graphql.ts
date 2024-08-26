@@ -3,7 +3,7 @@ import { expressMiddleware } from '@apollo/server/express4'
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import * as tq from 'type-graphql'
 import { Context, provideContext } from './context'
-import { resolvers } from './resolvers/resolvers'
+import { resolvers } from './resolvers'
 import FlyPlugin from './providers/fly'
 import express from 'express';
 import { WalletAuthChecker } from './auth/wallet-auth-checker';

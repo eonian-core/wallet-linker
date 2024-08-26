@@ -1,8 +1,8 @@
 import * as TypeGraphQL from "type-graphql";
 import { Authorized } from "type-graphql";
 import type { GraphQLResolveInfo } from "graphql";
-import { EmailLink, SocialLink, Wallet } from "../resolvers/generated";
-import { getPrismaFromContext, transformCountFieldIntoSelectRelationsCount, transformInfoIntoPrismaArgs } from "../resolvers/generated/helpers";
+import { EmailLink, SocialLink, Wallet } from "../generated/type-graphql";
+import { getPrismaFromContext, transformCountFieldIntoSelectRelationsCount, transformInfoIntoPrismaArgs } from "../generated/type-graphql/helpers";
 import { Context } from "../context";
 import { Roles } from "../auth/wallet-auth-checker";
 import { isNotSoftDeleted } from "../soft-delete";
