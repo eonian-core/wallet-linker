@@ -59,7 +59,7 @@ input IntFilter {
 }
 
 type Mutation {
-  linkEmailToWallet(email: String!): EmailLink!
+  linkEmailToWallet(email: String!): Wallet!
 }
 
 input NestedIntFilter {
