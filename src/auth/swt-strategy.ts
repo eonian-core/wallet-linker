@@ -11,9 +11,13 @@ export interface SwtStrategyOptions {
     skipOnMissingSignature?: boolean;
     allowedOrigins: Array<string | RegExp>; 
 }
+export interface ISwtStrategy {
+    authenticate(req: Request, res: Response, next: NextFunction): void;
+}
+
 
 /** SWT Strategy: SIWE authentiacation strategy that uses JWT-like approach for authneticaiton */
-export class SwtStrategy {
+export class SwtStrategy implements ISwtStrategy {
 
     constructor(
         private validator: SignatureValidator,
