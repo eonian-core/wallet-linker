@@ -58,6 +58,10 @@ input IntFilter {
   notIn: [Int!]
 }
 
+type Mutation {
+  linkEmailToWallet(email: String!): EmailLink!
+}
+
 input NestedIntFilter {
   equals: Int
   gt: Int

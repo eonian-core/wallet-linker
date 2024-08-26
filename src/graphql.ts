@@ -3,15 +3,12 @@ import { expressMiddleware } from '@apollo/server/express4'
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import * as tq from 'type-graphql'
 import { Context, provideContext } from './context'
-import { resolvers, setupDecorators } from './resolvers/resolvers'
+import { resolvers } from './resolvers/resolvers'
 import FlyPlugin from './providers/fly'
 import express from 'express';
 import { WalletAuthChecker } from './auth/wallet-auth-checker';
 
 export async function startGraphql(app: express.Express, path: string) {
-  // important to setup before building schema
-  setupDecorators()
-
   const schemaPath = process.env.SHEMA_PATH || './schema.graphql'
   const schema = await tq.buildSchema({
     resolvers,
