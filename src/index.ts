@@ -29,7 +29,6 @@ const startApp = async () => {
   // allow to get nonce for signature verification
   app.get('/nonce', auth.nonceHandler()) 
 
-
   await startGraphql(app, '/graphql')
 
   const { url } = await startExpress(app, config.port)

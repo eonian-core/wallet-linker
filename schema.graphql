@@ -21,7 +21,6 @@ type EmailLink {
   deltedBy: String
   email: String!
   id: String!
-  wallet(where: WalletWhereInput): Wallet
   walletId: String
 }
 
@@ -31,40 +30,7 @@ input EmailLinkListRelationFilter {
   some: EmailLinkWhereInput
 }
 
-input EmailLinkOrderByRelationAggregateInput {
-  _count: SortOrder
-}
-
-input EmailLinkOrderByWithRelationInput {
-  createdBy: SortOrder
-  deltedBy: SortOrder
-  email: SortOrder
-  wallet: WalletOrderByWithRelationInput
-  walletId: SortOrder
-}
-
-enum EmailLinkScalarFieldEnum {
-  createdAt
-  createdBy
-  deletedAt
-  deltedBy
-  email
-  id
-  walletId
-}
-
 input EmailLinkWhereInput {
-  AND: [EmailLinkWhereInput!]
-  NOT: [EmailLinkWhereInput!]
-  OR: [EmailLinkWhereInput!]
-  createdBy: StringFilter
-  deltedBy: StringNullableFilter
-  email: StringFilter
-  wallet: WalletNullableRelationFilter
-  walletId: StringNullableFilter
-}
-
-input EmailLinkWhereUniqueInput {
   AND: [EmailLinkWhereInput!]
   NOT: [EmailLinkWhereInput!]
   OR: [EmailLinkWhereInput!]
@@ -127,7 +93,7 @@ input NestedStringNullableFilter {
 }
 
 type Query {
-  wallet(where: WalletWhereUniqueInput!): Wallet
+  wallet: Wallet
 }
 
 enum QueryMode {
@@ -151,7 +117,6 @@ type SocialLink {
   """twitter, facebook, instagram, etc."""
   platform: String!
   username: String!
-  wallet(where: WalletWhereInput): Wallet
   walletId: String
 }
 
@@ -159,30 +124,6 @@ input SocialLinkListRelationFilter {
   every: SocialLinkWhereInput
   none: SocialLinkWhereInput
   some: SocialLinkWhereInput
-}
-
-input SocialLinkOrderByRelationAggregateInput {
-  _count: SortOrder
-}
-
-input SocialLinkOrderByWithRelationInput {
-  createdBy: SortOrder
-  deltedBy: SortOrder
-  platform: SortOrder
-  username: SortOrder
-  wallet: WalletOrderByWithRelationInput
-  walletId: SortOrder
-}
-
-enum SocialLinkScalarFieldEnum {
-  createdAt
-  createdBy
-  deletedAt
-  deltedBy
-  id
-  platform
-  username
-  walletId
 }
 
 input SocialLinkWhereInput {
@@ -195,23 +136,6 @@ input SocialLinkWhereInput {
   username: StringFilter
   wallet: WalletNullableRelationFilter
   walletId: StringNullableFilter
-}
-
-input SocialLinkWhereUniqueInput {
-  AND: [SocialLinkWhereInput!]
-  NOT: [SocialLinkWhereInput!]
-  OR: [SocialLinkWhereInput!]
-  createdBy: StringFilter
-  deltedBy: StringNullableFilter
-  platform: StringFilter
-  username: StringFilter
-  wallet: WalletNullableRelationFilter
-  walletId: StringNullableFilter
-}
-
-enum SortOrder {
-  asc
-  desc
 }
 
 input StringFilter {
@@ -263,14 +187,9 @@ type Wallet {
 
   """Initiator of the delete action. Ex. user, admin"""
   deltedBy: String
-  emailLinks(cursor: EmailLinkWhereUniqueInput, distinct: [EmailLinkScalarFieldEnum!], orderBy: [EmailLinkOrderByWithRelationInput!], skip: Int, take: Int, where: EmailLinkWhereInput): [EmailLink!]!
+  emailLinks: [EmailLink!]!
   id: String!
-  socialLinks(cursor: SocialLinkWhereUniqueInput, distinct: [SocialLinkScalarFieldEnum!], orderBy: [SocialLinkOrderByWithRelationInput!], skip: Int, take: Int, where: SocialLinkWhereInput): [SocialLink!]!
-}
-
-input WalletAddressChainIdCompoundUniqueInput {
-  address: String!
-  chainId: Int!
+  socialLinks: [SocialLink!]!
 }
 
 type WalletCount {
@@ -283,33 +202,11 @@ input WalletNullableRelationFilter {
   isNot: WalletWhereInput
 }
 
-input WalletOrderByWithRelationInput {
-  address: SortOrder
-  chainId: SortOrder
-  createdBy: SortOrder
-  deltedBy: SortOrder
-  emailLinks: EmailLinkOrderByRelationAggregateInput
-  socialLinks: SocialLinkOrderByRelationAggregateInput
-}
-
 input WalletWhereInput {
   AND: [WalletWhereInput!]
   NOT: [WalletWhereInput!]
   OR: [WalletWhereInput!]
   address: StringFilter
-  chainId: IntFilter
-  createdBy: StringFilter
-  deltedBy: StringNullableFilter
-  emailLinks: EmailLinkListRelationFilter
-  socialLinks: SocialLinkListRelationFilter
-}
-
-input WalletWhereUniqueInput {
-  AND: [WalletWhereInput!]
-  NOT: [WalletWhereInput!]
-  OR: [WalletWhereInput!]
-  address: StringFilter
-  address_chainId: WalletAddressChainIdCompoundUniqueInput
   chainId: IntFilter
   createdBy: StringFilter
   deltedBy: StringNullableFilter
