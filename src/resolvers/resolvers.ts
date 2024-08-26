@@ -42,9 +42,6 @@ export const resolvers: NonEmptyArray<Function> = [
 
 
 const resolversEnhanceMap: ResolversEnhanceMap = {
-    Wallet: {
-        _all: [Authorized(Roles.USER)],
-    },
   };
   
 export const setupDecorators = () => applyResolversEnhanceMap(resolversEnhanceMap);

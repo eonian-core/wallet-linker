@@ -1,10 +1,13 @@
 import * as TypeGraphQL from "type-graphql";
+import { Authorized } from "type-graphql";
 import type { GraphQLResolveInfo } from "graphql";
 import { EmailLink, SocialLink, Wallet } from "../resolvers/generated";
 import { getPrismaFromContext, transformCountFieldIntoSelectRelationsCount, transformInfoIntoPrismaArgs } from "../resolvers/generated/helpers";
 import { Context } from "../context";
+import { Roles } from "../auth/wallet-auth-checker";
 
 /** Based on generated resolver */
+@Authorized(Roles.USER)
 @TypeGraphQL.Resolver(_of => Wallet)
 export class FindUniqueWalletResolver {
     @TypeGraphQL.Query(_returns => Wallet, {
@@ -27,6 +30,7 @@ export class FindUniqueWalletResolver {
 }
 
 /** Based on generated resolver */
+@Authorized(Roles.USER)
 @TypeGraphQL.Resolver(_of => Wallet)
 export class WalletRelationsResolver {
     @TypeGraphQL.FieldResolver(_type => [EmailLink], {

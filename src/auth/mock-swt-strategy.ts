@@ -9,7 +9,8 @@ export class MockSwtStrategy implements ISwtStrategy {
         const chainId = req.header(MOCK_CHAIN_ID_HEADER);
 
         if(!address || !chainId) {
-            throw new Error('Mock address or chain id not provided');
+            console.log('Mock address or chain id not provided, will skip');
+            return next();
         }
 
         req.wallet = {address, chainId: Number(chainId), signature: 'mock-signature', nonce: 'mock-nonce'};
