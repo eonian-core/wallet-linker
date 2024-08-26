@@ -27,13 +27,17 @@ export class FindUniqueWalletPreviewResolver {
         nullable: true
     })
     async walletPreview(@TypeGraphQL.Ctx() ctx: Context, @TypeGraphQL.Info() info: GraphQLResolveInfo, @TypeGraphQL.Args() args: FindUniqueWalletPreviewArgs): Promise<WalletPreview | null> {
-        const { address, chainId } = args;
-
+        let { address, chainId } = args;
+        // client and network can accidentially lowercase address
+        // so store it in lowercase to prevent case mismatch
+        address = address.toLowerCase(); 
+        console.log(`FindUniqueWalletPreviewResolver: address=${address}, chainId=${chainId}`);
         const wallet = await ctx.prisma.wallet.findUnique({ where: { 
             address_chainId: { address, chainId },
             ...isNotSoftDeleted
         } });
         if (!wallet) {
+            console.log(`FindUniqueWalletPreviewResolver: wallet not found`);
             return null;
         }
 

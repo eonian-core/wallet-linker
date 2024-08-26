@@ -47,10 +47,12 @@ export class Wallet {
 
   /**
    * Wallet address
+   * client and network can accidentially lowercase address
+   * so store it in lowercase to prevent case mismatch
    */
   @TypeGraphQL.Field(_type => String, {
     nullable: false,
-    description: "Wallet address"
+    description: "Wallet address\nclient and network can accidentially lowercase address\nso store it in lowercase to prevent case mismatch"
   })
   address!: string;
 

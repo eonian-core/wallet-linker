@@ -43,7 +43,7 @@ describe('SignatureValidator', () => {
     it('should return user if signature is valid', async () => {
       const user = await validator.validateSignature(payload, signature, uri, allowedOrigins, currentTime);
       expect(user).toEqual({
-        address,
+        address: address.toLowerCase(),
         signature,
         nonce,
         chainId,

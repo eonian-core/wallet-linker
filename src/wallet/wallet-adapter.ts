@@ -5,6 +5,8 @@ export class WalletAdapter {
   constructor(private prisma: PrismaClient) {}
 
   async findOrCreateWallet(address: string, chainId: number, createdBy: Roles = Roles.USER): Promise<Wallet> {
+    address = address.toLowerCase();
+    
     return await this.prisma.wallet.upsert({
       where: { 
         address_chainId: { address, chainId }, 

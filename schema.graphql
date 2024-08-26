@@ -183,7 +183,11 @@ input StringNullableFilter {
 type Wallet {
   _count: WalletCount
 
-  """Wallet address"""
+  """
+  Wallet address
+  client and network can accidentially lowercase address
+  so store it in lowercase to prevent case mismatch
+  """
   address: String!
 
   """Chain id, ex. 1 for Ethereum, 56 for Binance Smart Chain"""
