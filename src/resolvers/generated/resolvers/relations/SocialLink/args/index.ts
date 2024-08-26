@@ -1,0 +1,1 @@
+export { SocialLinkWalletArgs } from "./SocialLinkWalletArgs";

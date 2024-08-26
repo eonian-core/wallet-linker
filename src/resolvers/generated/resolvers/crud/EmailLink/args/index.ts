@@ -1,0 +1,14 @@
+export { AggregateEmailLinkArgs } from "./AggregateEmailLinkArgs";
+export { CreateManyEmailLinkArgs } from "./CreateManyEmailLinkArgs";
+export { CreateOneEmailLinkArgs } from "./CreateOneEmailLinkArgs";
+export { DeleteManyEmailLinkArgs } from "./DeleteManyEmailLinkArgs";
+export { DeleteOneEmailLinkArgs } from "./DeleteOneEmailLinkArgs";
+export { FindFirstEmailLinkArgs } from "./FindFirstEmailLinkArgs";
+export { FindFirstEmailLinkOrThrowArgs } from "./FindFirstEmailLinkOrThrowArgs";
+export { FindManyEmailLinkArgs } from "./FindManyEmailLinkArgs";
+export { FindUniqueEmailLinkArgs } from "./FindUniqueEmailLinkArgs";
+export { FindUniqueEmailLinkOrThrowArgs } from "./FindUniqueEmailLinkOrThrowArgs";
+export { GroupByEmailLinkArgs } from "./GroupByEmailLinkArgs";
+export { UpdateManyEmailLinkArgs } from "./UpdateManyEmailLinkArgs";
+export { UpdateOneEmailLinkArgs } from "./UpdateOneEmailLinkArgs";
+export { UpsertOneEmailLinkArgs } from "./UpsertOneEmailLinkArgs";
