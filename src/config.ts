@@ -3,11 +3,12 @@ export const isProduction = process.env.NODE_ENV !== 'development'
 console.log(`Starting server in ${isProduction ? 'production' : 'development'} mode`)
 
 export const port = +(process.env.PORT || "4000")
-// localhost:3000 -> web app development server
+
 export const allowedOrigins = [
-    /.*:\/\/localhost:.*/, /localhost:.*/, 
-    /^(https?:\/\/)?eonian\.finance(\/[a-zA-Z0-9\/]*)?$/,
-    /^(https?:\/\/)?eonian\.io(\/[a-zA-Z0-9\/]*)?$/,
+    /.*:\/\/localhost:.*/, /localhost:.*/, // localhost:3000 -> web app development server
+    /^(https?:\/\/)?([a-zA-Z0-9.-]+\.)?eonian\.finance(\/[a-zA-Z0-9\/]*)?$/,
+    /^(https?:\/\/)?([a-zA-Z0-9.-]+\.)?eonian\.io(\/[a-zA-Z0-9\/]*)?$/,
+    /^(https?:\/\/)?([a-zA-Z0-9-]+-eonian\.)vercel\.app(\/[a-zA-Z0-9\/]*)?$/, // preview environment
 ]
 console.log(`Allowed origins: ${allowedOrigins.join(', ')}`)
 
