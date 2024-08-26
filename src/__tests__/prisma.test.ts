@@ -1,6 +1,7 @@
 import {describe, expect, test, beforeAll, afterAll} from '@jest/globals';
 import { PrismaClient } from '@prisma/client'
 import { Roles } from '../auth/wallet-auth-checker';
+import { isNotSoftDeleted } from '../soft-delete';
 
 export const prisma = new PrismaClient()
 
@@ -100,9 +101,7 @@ describe('setup test database', () => {
     const wallet = await prisma.wallet.findUnique({
       where: {
         id: walletId,
-        deletedAt: {
-            isSet: false,
-        },
+        ...isNotSoftDeleted
       },
     })
 
@@ -115,9 +114,7 @@ describe('setup test database', () => {
       .findUnique({
         where: {
           id: walletId,
-          deletedAt: {
-            isSet: false,
-            },
+          ...isNotSoftDeleted
         },
       })
       .emailLinks()
@@ -130,9 +127,7 @@ describe('setup test database', () => {
     const emailLinksFromWallet = await prisma.emailLink.findMany({
       where: {
         walletId: walletId,
-        deletedAt: {
-            isSet: false,
-        },
+        ...isNotSoftDeleted
       },
     })
     expect(emailLinksFromWallet).toBeTruthy()
@@ -145,9 +140,7 @@ describe('setup test database', () => {
         email: {
           equals: email,
         },
-        deletedAt: {
-            isSet: false,
-        },
+        ...isNotSoftDeleted
       },
     })
     expect(emailLinks).toBeTruthy()
@@ -158,9 +151,7 @@ describe('setup test database', () => {
     const emailLinksByWallet = await prisma.emailLink.updateMany({
       where: {
         walletId: walletId,
-        deletedAt: {
-            isSet: false,
-        },
+        ...isNotSoftDeleted
       },
       data: {
         createdBy: Roles.ADMIN,
@@ -172,9 +163,7 @@ describe('setup test database', () => {
     const emailLinks = await prisma.emailLink.findMany({
       where: {
         walletId: walletId,
-        deletedAt: {
-            isSet: false,
-        },
+        ...isNotSoftDeleted
       },
       select: {
         createdBy: true,
@@ -191,9 +180,7 @@ describe('setup test database', () => {
     const deletedEmailLink = await prisma.emailLink.delete({
       where: {
         id: emailLinkId,
-        deletedAt: {
-            isSet: false,
-        },
+        ...isNotSoftDeleted
       },
     })
     expect(deletedEmailLink).toBeTruthy()
@@ -201,9 +188,7 @@ describe('setup test database', () => {
     const emailLinkByWalletCount = await prisma.emailLink.count({
       where: {
         walletId: walletId,
-        deletedAt: {
-            isSet: false,
-        },
+        ...isNotSoftDeleted
       },
     })
 

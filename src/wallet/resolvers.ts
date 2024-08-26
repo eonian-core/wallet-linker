@@ -5,6 +5,7 @@ import { EmailLink, SocialLink, Wallet } from "../resolvers/generated";
 import { getPrismaFromContext, transformCountFieldIntoSelectRelationsCount, transformInfoIntoPrismaArgs } from "../resolvers/generated/helpers";
 import { Context } from "../context";
 import { Roles } from "../auth/wallet-auth-checker";
+import { isNotSoftDeleted } from "../soft-delete";
 
 /** Based on generated resolver */
 @Authorized(Roles.USER)
@@ -25,9 +26,7 @@ export class FindUniqueWalletResolver {
         return getPrismaFromContext(ctx).wallet.findUnique({
             where: { 
                 address_chainId: { address, chainId }, 
-                deletedAt: {
-                    isSet: false,
-                },
+                ...isNotSoftDeleted
             },
             ...(_count && transformCountFieldIntoSelectRelationsCount(_count)),
         });
@@ -46,9 +45,7 @@ export class WalletRelationsResolver {
         return getPrismaFromContext(ctx).wallet.findUniqueOrThrow({
             where: {
                 id: wallet.id,
-                deletedAt: {
-                    isSet: false,
-                },
+                ...isNotSoftDeleted
             },
         }).emailLinks({
             ...(_count && transformCountFieldIntoSelectRelationsCount(_count)),
@@ -63,9 +60,7 @@ export class WalletRelationsResolver {
         return getPrismaFromContext(ctx).wallet.findUniqueOrThrow({
             where: {
                 id: wallet.id,
-                deletedAt: {
-                    isSet: false,
-                },
+                ...isNotSoftDeleted
             },
         }).socialLinks({
             ...(_count && transformCountFieldIntoSelectRelationsCount(_count)),

@@ -3,6 +3,7 @@ import type { GraphQLResolveInfo } from "graphql";
 import { EmailLinkPreview, WalletPreview } from "./preview.models";
 import { Context } from "../context";
 import { maskEmailForPreview } from "./mask-email";
+import { isNotSoftDeleted } from "../soft-delete";
 
 @TypeGraphQL.ArgsType()
 export class FindUniqueWalletPreviewArgs {
@@ -29,9 +30,7 @@ export class FindUniqueWalletPreviewResolver {
 
         const wallet = await ctx.prisma.wallet.findUnique({ where: { 
             address_chainId: { address, chainId },
-            deletedAt: {
-                isSet: false,
-            },
+            ...isNotSoftDeleted
         } });
         if (!wallet) {
             return null;
@@ -53,9 +52,7 @@ export class WalletPreviewRelationsResolver {
     async emailLink(@TypeGraphQL.Root() wallet: WalletPreview, @TypeGraphQL.Ctx() ctx: Context, @TypeGraphQL.Info() info: GraphQLResolveInfo): Promise<EmailLinkPreview | null> {
         const emailLinks = await ctx.prisma.emailLink.findMany({ where: { 
             walletId: wallet.id, 
-            deletedAt: {
-                isSet: false,
-            },
+            ...isNotSoftDeleted
         } });
         const emailLink = emailLinks[0];
         if (!emailLink) {
