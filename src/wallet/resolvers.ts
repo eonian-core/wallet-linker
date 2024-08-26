@@ -23,7 +23,12 @@ export class FindUniqueWalletResolver {
         const { _count } = transformInfoIntoPrismaArgs(info);
 
         return getPrismaFromContext(ctx).wallet.findUnique({
-            where: { address_chainId: { address, chainId } },
+            where: { 
+                address_chainId: { address, chainId }, 
+                deletedAt: {
+                    isSet: false,
+                },
+            },
             ...(_count && transformCountFieldIntoSelectRelationsCount(_count)),
         });
     }
@@ -41,6 +46,9 @@ export class WalletRelationsResolver {
         return getPrismaFromContext(ctx).wallet.findUniqueOrThrow({
             where: {
                 id: wallet.id,
+                deletedAt: {
+                    isSet: false,
+                },
             },
         }).emailLinks({
             ...(_count && transformCountFieldIntoSelectRelationsCount(_count)),
@@ -55,6 +63,9 @@ export class WalletRelationsResolver {
         return getPrismaFromContext(ctx).wallet.findUniqueOrThrow({
             where: {
                 id: wallet.id,
+                deletedAt: {
+                    isSet: false,
+                },
             },
         }).socialLinks({
             ...(_count && transformCountFieldIntoSelectRelationsCount(_count)),

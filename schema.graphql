@@ -30,6 +30,12 @@ input EmailLinkListRelationFilter {
   some: EmailLinkWhereInput
 }
 
+type EmailLinkPreview {
+  email: String!
+  id: String!
+  walletId: String
+}
+
 input EmailLinkWhereInput {
   AND: [EmailLinkWhereInput!]
   NOT: [EmailLinkWhereInput!]
@@ -94,6 +100,7 @@ input NestedStringNullableFilter {
 
 type Query {
   wallet: Wallet
+  walletPreview(address: String!, chainId: Int!): WalletPreview
 }
 
 enum QueryMode {
@@ -200,6 +207,16 @@ type WalletCount {
 input WalletNullableRelationFilter {
   is: WalletWhereInput
   isNot: WalletWhereInput
+}
+
+type WalletPreview {
+  """Wallet address"""
+  address: String!
+
+  """Chain id, ex. 1 for Ethereum, 56 for Binance Smart Chain"""
+  chainId: Int!
+  emailLink: EmailLinkPreview
+  id: String!
 }
 
 input WalletWhereInput {

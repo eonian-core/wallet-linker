@@ -31,7 +31,7 @@ describe('setup test database', () => {
   test('create wallet', async () => {
     const wallet = await prisma.wallet.create({
       data: {
-        address,
+        address: "0x2603B2E72A41b059344F5a7FbA52a0a1298E175f",
         chainId,
         createdBy: Roles.USER,
       },
@@ -39,7 +39,7 @@ describe('setup test database', () => {
 
     expect(wallet).toBeTruthy()
     expect(typeof wallet.id).toEqual('string')
-    expect(wallet.address).toEqual(address)
+    expect(wallet.address).toEqual('0x2603B2E72A41b059344F5a7FbA52a0a1298E175f')
     expect(wallet.chainId).toEqual(chainId)
     expect(wallet.createdBy).toEqual(Roles.USER)
   })
@@ -100,6 +100,9 @@ describe('setup test database', () => {
     const wallet = await prisma.wallet.findUnique({
       where: {
         id: walletId,
+        deletedAt: {
+            isSet: false,
+        },
       },
     })
 
@@ -112,6 +115,9 @@ describe('setup test database', () => {
       .findUnique({
         where: {
           id: walletId,
+          deletedAt: {
+            isSet: false,
+            },
         },
       })
       .emailLinks()
@@ -124,6 +130,9 @@ describe('setup test database', () => {
     const emailLinksFromWallet = await prisma.emailLink.findMany({
       where: {
         walletId: walletId,
+        deletedAt: {
+            isSet: false,
+        },
       },
     })
     expect(emailLinksFromWallet).toBeTruthy()
@@ -136,6 +145,9 @@ describe('setup test database', () => {
         email: {
           equals: email,
         },
+        deletedAt: {
+            isSet: false,
+        },
       },
     })
     expect(emailLinks).toBeTruthy()
@@ -146,6 +158,9 @@ describe('setup test database', () => {
     const emailLinksByWallet = await prisma.emailLink.updateMany({
       where: {
         walletId: walletId,
+        deletedAt: {
+            isSet: false,
+        },
       },
       data: {
         createdBy: Roles.ADMIN,
@@ -157,6 +172,9 @@ describe('setup test database', () => {
     const emailLinks = await prisma.emailLink.findMany({
       where: {
         walletId: walletId,
+        deletedAt: {
+            isSet: false,
+        },
       },
       select: {
         createdBy: true,
@@ -173,6 +191,9 @@ describe('setup test database', () => {
     const deletedEmailLink = await prisma.emailLink.delete({
       where: {
         id: emailLinkId,
+        deletedAt: {
+            isSet: false,
+        },
       },
     })
     expect(deletedEmailLink).toBeTruthy()
@@ -180,6 +201,9 @@ describe('setup test database', () => {
     const emailLinkByWalletCount = await prisma.emailLink.count({
       where: {
         walletId: walletId,
+        deletedAt: {
+            isSet: false,
+        },
       },
     })
 
