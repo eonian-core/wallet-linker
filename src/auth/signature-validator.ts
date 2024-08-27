@@ -68,7 +68,7 @@ export class SignatureValidator {
         }
     
         return {
-            address,
+            address: address.toLowerCase(),
             signature,
             nonce: message.nonce,
             chainId: message.chainId

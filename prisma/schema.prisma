@@ -10,6 +10,7 @@ generator client {
 
 generator typegraphql {
   provider = "typegraphql-prisma"
+  output   = "../src/generated/type-graphql"
 }
 
 datasource db {
@@ -31,6 +32,8 @@ model Wallet {
   deltedBy       String?
   
   /// Wallet address
+  /// client and network can accidentially lowercase address
+  /// so store it in lowercase to prevent case mismatch
   address        String
   /// Chain id, ex. 1 for Ethereum, 56 for Binance Smart Chain
   chainId        Int

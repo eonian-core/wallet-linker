@@ -21,43 +21,7 @@ type EmailLink {
   deltedBy: String
   email: String!
   id: String!
-  wallet(where: WalletWhereInput): Wallet
   walletId: String
-}
-
-input EmailLinkCreateInput {
-  createdBy: String!
-  deltedBy: String
-  email: String!
-  wallet: WalletCreateNestedOneWithoutEmailLinksInput
-}
-
-input EmailLinkCreateManyWalletInput {
-  createdBy: String!
-  deltedBy: String
-  email: String!
-}
-
-input EmailLinkCreateManyWalletInputEnvelope {
-  data: [EmailLinkCreateManyWalletInput!]!
-}
-
-input EmailLinkCreateNestedManyWithoutWalletInput {
-  connect: [EmailLinkWhereUniqueInput!]
-  connectOrCreate: [EmailLinkCreateOrConnectWithoutWalletInput!]
-  create: [EmailLinkCreateWithoutWalletInput!]
-  createMany: EmailLinkCreateManyWalletInputEnvelope
-}
-
-input EmailLinkCreateOrConnectWithoutWalletInput {
-  create: EmailLinkCreateWithoutWalletInput!
-  where: EmailLinkWhereUniqueInput!
-}
-
-input EmailLinkCreateWithoutWalletInput {
-  createdBy: String!
-  deltedBy: String
-  email: String!
 }
 
 input EmailLinkListRelationFilter {
@@ -66,85 +30,10 @@ input EmailLinkListRelationFilter {
   some: EmailLinkWhereInput
 }
 
-input EmailLinkOrderByRelationAggregateInput {
-  _count: SortOrder
-}
-
-input EmailLinkOrderByWithRelationInput {
-  createdBy: SortOrder
-  deltedBy: SortOrder
-  email: SortOrder
-  wallet: WalletOrderByWithRelationInput
-  walletId: SortOrder
-}
-
-enum EmailLinkScalarFieldEnum {
-  createdAt
-  createdBy
-  deletedAt
-  deltedBy
-  email
-  id
-  walletId
-}
-
-input EmailLinkScalarWhereInput {
-  AND: [EmailLinkScalarWhereInput!]
-  NOT: [EmailLinkScalarWhereInput!]
-  OR: [EmailLinkScalarWhereInput!]
-  createdBy: StringFilter
-  deltedBy: StringNullableFilter
-  email: StringFilter
-  walletId: StringNullableFilter
-}
-
-input EmailLinkUpdateInput {
-  createdBy: StringFieldUpdateOperationsInput
-  deltedBy: NullableStringFieldUpdateOperationsInput
-  email: StringFieldUpdateOperationsInput
-  wallet: WalletUpdateOneWithoutEmailLinksNestedInput
-}
-
-input EmailLinkUpdateManyMutationInput {
-  createdBy: StringFieldUpdateOperationsInput
-  deltedBy: NullableStringFieldUpdateOperationsInput
-  email: StringFieldUpdateOperationsInput
-}
-
-input EmailLinkUpdateManyWithWhereWithoutWalletInput {
-  data: EmailLinkUpdateManyMutationInput!
-  where: EmailLinkScalarWhereInput!
-}
-
-input EmailLinkUpdateManyWithoutWalletNestedInput {
-  connect: [EmailLinkWhereUniqueInput!]
-  connectOrCreate: [EmailLinkCreateOrConnectWithoutWalletInput!]
-  create: [EmailLinkCreateWithoutWalletInput!]
-  createMany: EmailLinkCreateManyWalletInputEnvelope
-  delete: [EmailLinkWhereUniqueInput!]
-  deleteMany: [EmailLinkScalarWhereInput!]
-  disconnect: [EmailLinkWhereUniqueInput!]
-  set: [EmailLinkWhereUniqueInput!]
-  update: [EmailLinkUpdateWithWhereUniqueWithoutWalletInput!]
-  updateMany: [EmailLinkUpdateManyWithWhereWithoutWalletInput!]
-  upsert: [EmailLinkUpsertWithWhereUniqueWithoutWalletInput!]
-}
-
-input EmailLinkUpdateWithWhereUniqueWithoutWalletInput {
-  data: EmailLinkUpdateWithoutWalletInput!
-  where: EmailLinkWhereUniqueInput!
-}
-
-input EmailLinkUpdateWithoutWalletInput {
-  createdBy: StringFieldUpdateOperationsInput
-  deltedBy: NullableStringFieldUpdateOperationsInput
-  email: StringFieldUpdateOperationsInput
-}
-
-input EmailLinkUpsertWithWhereUniqueWithoutWalletInput {
-  create: EmailLinkCreateWithoutWalletInput!
-  update: EmailLinkUpdateWithoutWalletInput!
-  where: EmailLinkWhereUniqueInput!
+type EmailLinkPreview {
+  email: String!
+  id: String!
+  walletId: String
 }
 
 input EmailLinkWhereInput {
@@ -156,25 +45,6 @@ input EmailLinkWhereInput {
   email: StringFilter
   wallet: WalletNullableRelationFilter
   walletId: StringNullableFilter
-}
-
-input EmailLinkWhereUniqueInput {
-  AND: [EmailLinkWhereInput!]
-  NOT: [EmailLinkWhereInput!]
-  OR: [EmailLinkWhereInput!]
-  createdBy: StringFilter
-  deltedBy: StringNullableFilter
-  email: StringFilter
-  wallet: WalletNullableRelationFilter
-  walletId: StringNullableFilter
-}
-
-input IntFieldUpdateOperationsInput {
-  decrement: Int
-  divide: Int
-  increment: Int
-  multiply: Int
-  set: Int
 }
 
 input IntFilter {
@@ -189,12 +59,7 @@ input IntFilter {
 }
 
 type Mutation {
-  createOneEmailLink(data: EmailLinkCreateInput!): EmailLink!
-  createOneSocialLink(data: SocialLinkCreateInput!): SocialLink!
-  createOneWallet(data: WalletCreateInput!): Wallet!
-  updateOneEmailLink(data: EmailLinkUpdateInput!, where: EmailLinkWhereUniqueInput!): EmailLink
-  updateOneSocialLink(data: SocialLinkUpdateInput!, where: SocialLinkWhereUniqueInput!): SocialLink
-  updateOneWallet(data: WalletUpdateInput!, where: WalletWhereUniqueInput!): Wallet
+  linkEmailToWallet(email: String!): Wallet!
 }
 
 input NestedIntFilter {
@@ -237,18 +102,9 @@ input NestedStringNullableFilter {
   startsWith: String
 }
 
-input NullableStringFieldUpdateOperationsInput {
-  set: String
-  unset: Boolean
-}
-
 type Query {
-  emailLink(where: EmailLinkWhereUniqueInput!): EmailLink
-  emailLinks(cursor: EmailLinkWhereUniqueInput, distinct: [EmailLinkScalarFieldEnum!], orderBy: [EmailLinkOrderByWithRelationInput!], skip: Int, take: Int, where: EmailLinkWhereInput): [EmailLink!]!
-  socialLink(where: SocialLinkWhereUniqueInput!): SocialLink
-  socialLinks(cursor: SocialLinkWhereUniqueInput, distinct: [SocialLinkScalarFieldEnum!], orderBy: [SocialLinkOrderByWithRelationInput!], skip: Int, take: Int, where: SocialLinkWhereInput): [SocialLink!]!
-  wallet(where: WalletWhereUniqueInput!): Wallet
-  wallets(cursor: WalletWhereUniqueInput, distinct: [WalletScalarFieldEnum!], orderBy: [WalletOrderByWithRelationInput!], skip: Int, take: Int, where: WalletWhereInput): [Wallet!]!
+  wallet: Wallet
+  walletPreview(address: String!, chainId: Int!): WalletPreview
 }
 
 enum QueryMode {
@@ -272,139 +128,13 @@ type SocialLink {
   """twitter, facebook, instagram, etc."""
   platform: String!
   username: String!
-  wallet(where: WalletWhereInput): Wallet
   walletId: String
-}
-
-input SocialLinkCreateInput {
-  createdBy: String!
-  deltedBy: String
-  platform: String!
-  username: String!
-  wallet: WalletCreateNestedOneWithoutSocialLinksInput
-}
-
-input SocialLinkCreateManyWalletInput {
-  createdBy: String!
-  deltedBy: String
-  platform: String!
-  username: String!
-}
-
-input SocialLinkCreateManyWalletInputEnvelope {
-  data: [SocialLinkCreateManyWalletInput!]!
-}
-
-input SocialLinkCreateNestedManyWithoutWalletInput {
-  connect: [SocialLinkWhereUniqueInput!]
-  connectOrCreate: [SocialLinkCreateOrConnectWithoutWalletInput!]
-  create: [SocialLinkCreateWithoutWalletInput!]
-  createMany: SocialLinkCreateManyWalletInputEnvelope
-}
-
-input SocialLinkCreateOrConnectWithoutWalletInput {
-  create: SocialLinkCreateWithoutWalletInput!
-  where: SocialLinkWhereUniqueInput!
-}
-
-input SocialLinkCreateWithoutWalletInput {
-  createdBy: String!
-  deltedBy: String
-  platform: String!
-  username: String!
 }
 
 input SocialLinkListRelationFilter {
   every: SocialLinkWhereInput
   none: SocialLinkWhereInput
   some: SocialLinkWhereInput
-}
-
-input SocialLinkOrderByRelationAggregateInput {
-  _count: SortOrder
-}
-
-input SocialLinkOrderByWithRelationInput {
-  createdBy: SortOrder
-  deltedBy: SortOrder
-  platform: SortOrder
-  username: SortOrder
-  wallet: WalletOrderByWithRelationInput
-  walletId: SortOrder
-}
-
-enum SocialLinkScalarFieldEnum {
-  createdAt
-  createdBy
-  deletedAt
-  deltedBy
-  id
-  platform
-  username
-  walletId
-}
-
-input SocialLinkScalarWhereInput {
-  AND: [SocialLinkScalarWhereInput!]
-  NOT: [SocialLinkScalarWhereInput!]
-  OR: [SocialLinkScalarWhereInput!]
-  createdBy: StringFilter
-  deltedBy: StringNullableFilter
-  platform: StringFilter
-  username: StringFilter
-  walletId: StringNullableFilter
-}
-
-input SocialLinkUpdateInput {
-  createdBy: StringFieldUpdateOperationsInput
-  deltedBy: NullableStringFieldUpdateOperationsInput
-  platform: StringFieldUpdateOperationsInput
-  username: StringFieldUpdateOperationsInput
-  wallet: WalletUpdateOneWithoutSocialLinksNestedInput
-}
-
-input SocialLinkUpdateManyMutationInput {
-  createdBy: StringFieldUpdateOperationsInput
-  deltedBy: NullableStringFieldUpdateOperationsInput
-  platform: StringFieldUpdateOperationsInput
-  username: StringFieldUpdateOperationsInput
-}
-
-input SocialLinkUpdateManyWithWhereWithoutWalletInput {
-  data: SocialLinkUpdateManyMutationInput!
-  where: SocialLinkScalarWhereInput!
-}
-
-input SocialLinkUpdateManyWithoutWalletNestedInput {
-  connect: [SocialLinkWhereUniqueInput!]
-  connectOrCreate: [SocialLinkCreateOrConnectWithoutWalletInput!]
-  create: [SocialLinkCreateWithoutWalletInput!]
-  createMany: SocialLinkCreateManyWalletInputEnvelope
-  delete: [SocialLinkWhereUniqueInput!]
-  deleteMany: [SocialLinkScalarWhereInput!]
-  disconnect: [SocialLinkWhereUniqueInput!]
-  set: [SocialLinkWhereUniqueInput!]
-  update: [SocialLinkUpdateWithWhereUniqueWithoutWalletInput!]
-  updateMany: [SocialLinkUpdateManyWithWhereWithoutWalletInput!]
-  upsert: [SocialLinkUpsertWithWhereUniqueWithoutWalletInput!]
-}
-
-input SocialLinkUpdateWithWhereUniqueWithoutWalletInput {
-  data: SocialLinkUpdateWithoutWalletInput!
-  where: SocialLinkWhereUniqueInput!
-}
-
-input SocialLinkUpdateWithoutWalletInput {
-  createdBy: StringFieldUpdateOperationsInput
-  deltedBy: NullableStringFieldUpdateOperationsInput
-  platform: StringFieldUpdateOperationsInput
-  username: StringFieldUpdateOperationsInput
-}
-
-input SocialLinkUpsertWithWhereUniqueWithoutWalletInput {
-  create: SocialLinkCreateWithoutWalletInput!
-  update: SocialLinkUpdateWithoutWalletInput!
-  where: SocialLinkWhereUniqueInput!
 }
 
 input SocialLinkWhereInput {
@@ -417,27 +147,6 @@ input SocialLinkWhereInput {
   username: StringFilter
   wallet: WalletNullableRelationFilter
   walletId: StringNullableFilter
-}
-
-input SocialLinkWhereUniqueInput {
-  AND: [SocialLinkWhereInput!]
-  NOT: [SocialLinkWhereInput!]
-  OR: [SocialLinkWhereInput!]
-  createdBy: StringFilter
-  deltedBy: StringNullableFilter
-  platform: StringFilter
-  username: StringFilter
-  wallet: WalletNullableRelationFilter
-  walletId: StringNullableFilter
-}
-
-enum SortOrder {
-  asc
-  desc
-}
-
-input StringFieldUpdateOperationsInput {
-  set: String
 }
 
 input StringFilter {
@@ -474,7 +183,11 @@ input StringNullableFilter {
 type Wallet {
   _count: WalletCount
 
-  """Wallet address"""
+  """
+  Wallet address
+  client and network can accidentially lowercase address
+  so store it in lowercase to prevent case mismatch
+  """
   address: String!
 
   """Chain id, ex. 1 for Ethereum, 56 for Binance Smart Chain"""
@@ -489,14 +202,10 @@ type Wallet {
 
   """Initiator of the delete action. Ex. user, admin"""
   deltedBy: String
-  emailLinks(cursor: EmailLinkWhereUniqueInput, distinct: [EmailLinkScalarFieldEnum!], orderBy: [EmailLinkOrderByWithRelationInput!], skip: Int, take: Int, where: EmailLinkWhereInput): [EmailLink!]!
+  emailLinks: [EmailLink!]!
   id: String!
-  socialLinks(cursor: SocialLinkWhereUniqueInput, distinct: [SocialLinkScalarFieldEnum!], orderBy: [SocialLinkOrderByWithRelationInput!], skip: Int, take: Int, where: SocialLinkWhereInput): [SocialLink!]!
-}
-
-input WalletAddressChainIdCompoundUniqueInput {
-  address: String!
-  chainId: Int!
+  preview: WalletPreview!
+  socialLinks: [SocialLink!]!
 }
 
 type WalletCount {
@@ -504,142 +213,19 @@ type WalletCount {
   socialLinks(where: SocialLinkWhereInput): Int!
 }
 
-input WalletCreateInput {
-  address: String!
-  chainId: Int!
-  createdBy: String!
-  deltedBy: String
-  emailLinks: EmailLinkCreateNestedManyWithoutWalletInput
-  socialLinks: SocialLinkCreateNestedManyWithoutWalletInput
-}
-
-input WalletCreateNestedOneWithoutEmailLinksInput {
-  connect: WalletWhereUniqueInput
-  connectOrCreate: WalletCreateOrConnectWithoutEmailLinksInput
-  create: WalletCreateWithoutEmailLinksInput
-}
-
-input WalletCreateNestedOneWithoutSocialLinksInput {
-  connect: WalletWhereUniqueInput
-  connectOrCreate: WalletCreateOrConnectWithoutSocialLinksInput
-  create: WalletCreateWithoutSocialLinksInput
-}
-
-input WalletCreateOrConnectWithoutEmailLinksInput {
-  create: WalletCreateWithoutEmailLinksInput!
-  where: WalletWhereUniqueInput!
-}
-
-input WalletCreateOrConnectWithoutSocialLinksInput {
-  create: WalletCreateWithoutSocialLinksInput!
-  where: WalletWhereUniqueInput!
-}
-
-input WalletCreateWithoutEmailLinksInput {
-  address: String!
-  chainId: Int!
-  createdBy: String!
-  deltedBy: String
-  socialLinks: SocialLinkCreateNestedManyWithoutWalletInput
-}
-
-input WalletCreateWithoutSocialLinksInput {
-  address: String!
-  chainId: Int!
-  createdBy: String!
-  deltedBy: String
-  emailLinks: EmailLinkCreateNestedManyWithoutWalletInput
-}
-
 input WalletNullableRelationFilter {
   is: WalletWhereInput
   isNot: WalletWhereInput
 }
 
-input WalletOrderByWithRelationInput {
-  address: SortOrder
-  chainId: SortOrder
-  createdBy: SortOrder
-  deltedBy: SortOrder
-  emailLinks: EmailLinkOrderByRelationAggregateInput
-  socialLinks: SocialLinkOrderByRelationAggregateInput
-}
+type WalletPreview {
+  """Wallet address"""
+  address: String!
 
-enum WalletScalarFieldEnum {
-  address
-  chainId
-  createdAt
-  createdBy
-  deletedAt
-  deltedBy
-  id
-}
-
-input WalletUpdateInput {
-  address: StringFieldUpdateOperationsInput
-  chainId: IntFieldUpdateOperationsInput
-  createdBy: StringFieldUpdateOperationsInput
-  deltedBy: NullableStringFieldUpdateOperationsInput
-  emailLinks: EmailLinkUpdateManyWithoutWalletNestedInput
-  socialLinks: SocialLinkUpdateManyWithoutWalletNestedInput
-}
-
-input WalletUpdateOneWithoutEmailLinksNestedInput {
-  connect: WalletWhereUniqueInput
-  connectOrCreate: WalletCreateOrConnectWithoutEmailLinksInput
-  create: WalletCreateWithoutEmailLinksInput
-  delete: WalletWhereInput
-  disconnect: Boolean
-  update: WalletUpdateToOneWithWhereWithoutEmailLinksInput
-  upsert: WalletUpsertWithoutEmailLinksInput
-}
-
-input WalletUpdateOneWithoutSocialLinksNestedInput {
-  connect: WalletWhereUniqueInput
-  connectOrCreate: WalletCreateOrConnectWithoutSocialLinksInput
-  create: WalletCreateWithoutSocialLinksInput
-  delete: WalletWhereInput
-  disconnect: Boolean
-  update: WalletUpdateToOneWithWhereWithoutSocialLinksInput
-  upsert: WalletUpsertWithoutSocialLinksInput
-}
-
-input WalletUpdateToOneWithWhereWithoutEmailLinksInput {
-  data: WalletUpdateWithoutEmailLinksInput!
-  where: WalletWhereInput
-}
-
-input WalletUpdateToOneWithWhereWithoutSocialLinksInput {
-  data: WalletUpdateWithoutSocialLinksInput!
-  where: WalletWhereInput
-}
-
-input WalletUpdateWithoutEmailLinksInput {
-  address: StringFieldUpdateOperationsInput
-  chainId: IntFieldUpdateOperationsInput
-  createdBy: StringFieldUpdateOperationsInput
-  deltedBy: NullableStringFieldUpdateOperationsInput
-  socialLinks: SocialLinkUpdateManyWithoutWalletNestedInput
-}
-
-input WalletUpdateWithoutSocialLinksInput {
-  address: StringFieldUpdateOperationsInput
-  chainId: IntFieldUpdateOperationsInput
-  createdBy: StringFieldUpdateOperationsInput
-  deltedBy: NullableStringFieldUpdateOperationsInput
-  emailLinks: EmailLinkUpdateManyWithoutWalletNestedInput
-}
-
-input WalletUpsertWithoutEmailLinksInput {
-  create: WalletCreateWithoutEmailLinksInput!
-  update: WalletUpdateWithoutEmailLinksInput!
-  where: WalletWhereInput
-}
-
-input WalletUpsertWithoutSocialLinksInput {
-  create: WalletCreateWithoutSocialLinksInput!
-  update: WalletUpdateWithoutSocialLinksInput!
-  where: WalletWhereInput
+  """Chain id, ex. 1 for Ethereum, 56 for Binance Smart Chain"""
+  chainId: Int!
+  emailLink: EmailLinkPreview
+  id: String!
 }
 
 input WalletWhereInput {
@@ -647,19 +233,6 @@ input WalletWhereInput {
   NOT: [WalletWhereInput!]
   OR: [WalletWhereInput!]
   address: StringFilter
-  chainId: IntFilter
-  createdBy: StringFilter
-  deltedBy: StringNullableFilter
-  emailLinks: EmailLinkListRelationFilter
-  socialLinks: SocialLinkListRelationFilter
-}
-
-input WalletWhereUniqueInput {
-  AND: [WalletWhereInput!]
-  NOT: [WalletWhereInput!]
-  OR: [WalletWhereInput!]
-  address: StringFilter
-  address_chainId: WalletAddressChainIdCompoundUniqueInput
   chainId: IntFilter
   createdBy: StringFilter
   deltedBy: StringNullableFilter
